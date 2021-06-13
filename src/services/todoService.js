@@ -8,7 +8,7 @@ function todosUrl(id) {
     return `${apiEndPoint}${id}`
 }
 export async function getTodos() {
-    const { data } = await axios.get('http://localhost:8000/api/todos/')
+    const { data } = await axios.get('http://localhost:8080/api/todos/')
     todos = data;
     return todos;
 }

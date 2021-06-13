@@ -46,7 +46,7 @@ export default function SimpleModal({ children, title, buttonStyle }) {
         </div>
     );
     return (
-        <div>
+        <>
             <Button onClick={handleOpen} style={buttonStyle}>
                 {title}
             </Button>
@@ -58,6 +58,6 @@ export default function SimpleModal({ children, title, buttonStyle }) {
             >
                 {body}
             </Modal>
-        </div>
+        </>
     );
 }

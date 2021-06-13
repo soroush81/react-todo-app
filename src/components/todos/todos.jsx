@@ -1,34 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { deleteTodo, getTodos } from '../../services/todoService'
-import TodosTable from './todosTable';
-import { Box, Typography, Button, IconButton } from '@material-ui/core';
-import _ from 'lodash'
+import { Box, IconButton, Typography } from '@material-ui/core';
 import { toast } from 'react-toastify'
-import SimpleModal from '../common/modal';
-import TodoItem from './todoitem'
-import { makeStyles } from '@material-ui/core/styles';
+import _ from 'lodash'
+import AddIcon from '@material-ui/icons/Add';
 
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        position: 'absolute',
-        width: 500,
-        backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-    },
-    addButton: {
-        border: '2px solid #000'
-    }
-}));
+import { deleteTodo, getTodos } from '../../services/todoService'
+import SimpleModal from '../common/modal';
+import TodosTable from './todosTable';
+import TodoItem from './todoitem';
+import RadioGroupList from '../common/radioGroup';
+import { useStyles } from './styles';
+
+
+const filterType = [
+    { value: "all", label: "All" },
+    { value: "completed", label: "Completed" },
+    { value: "uncompleted", label: "Uncompleted" }
+]
 const TodoList = () => {
     const [todos, setTodos] = useState([])
     const [sortColumn, setSortColumn] = useState({ path: 'title', order: 'asc' })
+    const [filterStatus, setFilterStatus] = useState({ status: 'all' })
+
     const classes = useStyles()
+    let filtered = []
 
     useEffect(async () => {
         setTodos(await getTodos());
     }, [])
+
+    useEffect(() => {
+        filtered = getFilteredData(filterStatus)
+    }, [filterStatus])
 
     const handleDelete = async (id) => {
         const originalTodos = todos;
@@ -52,28 +55,34 @@ const TodoList = () => {
         newTodos[index].completed = !newTodos[index].completed;
         setTodos(newTodos);
     }
+
+    const handleChangeFilterStatus = (event) => {
+        setFilterStatus(event.target.value)
+    }
     const handleSort = (sortColumn) => {
         setSortColumn(sortColumn)
     }
 
+    const getFilteredData = (filter) => {
+        const status = (filter === 'completed') ? true : false;
+        filtered = (filter === 'all') ? todos : todos.filter(todo => todo.completed == status)
+        return filtered
+    }
+    const addButton = <IconButton aria-label="add task"><AddIcon /></IconButton>
+    filtered = getFilteredData(filterStatus);
 
     if (todos.length === 0) return <p>There is no todo in the list</p>
     return (
         <>
-            {/* <Typography variant="h4" color="primary">Todo List</Typography> */}
-
-            <Box m={2}><SimpleModal title="Add Task" buttonStyle={{ border: '2px solid #000' }}><TodoItem /></SimpleModal></Box>
-
-
-            <Box m={2} />
-            <TodosTable todos={todos}
+            <Box m={2}><Typography variant="h6" color="primary">TaskList</Typography></Box>
+            <TodosTable todos={filtered}
                 onDelete={handleDelete}
                 onChangeStatus={handleChangeStatus}
                 onSort={handleSort}
                 sortColumn={sortColumn} />
-            <Box m={5}>
-                <Button variant="outlined" color="primary">Completed</Button>
-                <Button variant="outlined" color="secondary">UnCompleted</Button>
+            <Box m={2} className={classes.marginAuto} alignItem="center">
+                <RadioGroupList data={filterType} value={filterStatus} handleChange={handleChangeFilterStatus} />
+                <Box m={2}><SimpleModal title={addButton}><TodoItem /></SimpleModal></Box>
             </Box>
         </>
     )
