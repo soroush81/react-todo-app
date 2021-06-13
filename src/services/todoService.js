@@ -1,14 +1,13 @@
 import http from './httpService'
-import axios from 'axios'
 
 let todos = [];
-const apiEndPoint = "/todos/";
+const apiEndPoint = "/todos";
 
 function todosUrl(id) {
-    return `${apiEndPoint}${id}`
+    return `${apiEndPoint}/${id}`
 }
 export async function getTodos() {
-    const { data } = await axios.get('http://localhost:8080/api/todos/')
+    const { data } = await http.get(apiEndPoint)
     todos = data;
     return todos;
 }

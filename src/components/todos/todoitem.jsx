@@ -31,9 +31,9 @@ const TodoItem = ({ todoitem }) => {
 
     const populateTodo = async () => {
         try {
-            const todoId = todo._id;
+            const todoId = todoitem._id;
             if (todoId === "new") return;
-
+            console.log(todo)
             const _todo = await getTodo(todoId);
             mapToViewModel(_todo);
         }
