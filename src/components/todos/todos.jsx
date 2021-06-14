@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, IconButton, Typography } from '@material-ui/core';
 import { toast } from 'react-toastify'
-import _ from 'lodash'
 import AddIcon from '@material-ui/icons/Add';
 
 import { deleteTodo, getTodos } from '../../services/todoService'
@@ -26,8 +25,12 @@ const TodoList = () => {
     let filtered = []
 
     useEffect(async () => {
-        setTodos(await getTodos());
+        await populateTodos()
     }, [])
+
+    const populateTodos = async () => {
+        setTodos(await getTodos());
+    }
 
     useEffect(() => {
         filtered = getFilteredData(filterStatus)
@@ -68,7 +71,9 @@ const TodoList = () => {
         filtered = (filter === 'all') ? todos : todos.filter(todo => todo.completed == status)
         return filtered
     }
+
     const addButton = <IconButton aria-label="add task"><AddIcon /></IconButton>
+
     filtered = getFilteredData(filterStatus);
 
     if (todos.length === 0) return <p>There is no todo in the list</p>
@@ -79,10 +84,11 @@ const TodoList = () => {
                 onDelete={handleDelete}
                 onChangeStatus={handleChangeStatus}
                 onSort={handleSort}
+                onClose={populateTodos}
                 sortColumn={sortColumn} />
-            <Box m={2} className={classes.marginAuto} alignItem="center">
+            <Box m={2} className={classes.marginAuto}>
                 <RadioGroupList data={filterType} value={filterStatus} handleChange={handleChangeFilterStatus} />
-                <Box m={2}><SimpleModal title={addButton}><TodoItem /></SimpleModal></Box>
+                <SimpleModal title={addButton} onClose={populateTodos} > <TodoItem /></SimpleModal>
             </Box>
         </>
     )

@@ -14,9 +14,9 @@ export function validate(values, schema) {
 export function validateField({ name, value }, schema, errors) {
     const errorMessage = validateProperty(name, value, schema);
     const newErrorObj = { ...errors };
-
     if (errorMessage) newErrorObj[name] = errorMessage;
     else delete newErrorObj[name];
+
     return newErrorObj;
 }
 

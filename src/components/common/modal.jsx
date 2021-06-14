@@ -20,7 +20,7 @@ function getModalStyle() {
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
-        width: 500,
+        width: 400,
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
@@ -28,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SimpleModal({ children, title, buttonStyle }) {
+export default function SimpleModal(props) {
+    const { children, title, buttonStyle, onClose } = props
     const classes = useStyles();
     const [modalStyle] = React.useState(getModalStyle);
     const [open, setOpen] = React.useState(false);
@@ -38,6 +39,7 @@ export default function SimpleModal({ children, title, buttonStyle }) {
 
     const handleClose = () => {
         setOpen(false);
+        onClose();
     };
 
     const body = (

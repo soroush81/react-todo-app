@@ -1,6 +1,11 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme) => ({
+    root: {
+        width: 500,
+        backgroundColor: theme.palette.background.paper,
+        margin: 'auto'
+    },
     paper: {
         position: 'absolute',
         width: 500,
@@ -14,7 +19,10 @@ export const useStyles = makeStyles((theme) => ({
     },
     marginAuto: {
         display: 'flex',
-        alignItems: "center",
         justifyContent: "center"
     }
 }));
+
+export const titleStyle = (todo) => {
+    return { textDecoration: todo.completed ? 'line-through' : 'none' }
+}

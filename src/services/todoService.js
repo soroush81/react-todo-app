@@ -1,10 +1,10 @@
 import http from './httpService'
 
 let todos = [];
-const apiEndPoint = "/todos";
+const apiEndPoint = "/todos/";
 
 function todosUrl(id) {
-    return `${apiEndPoint}/${id}`
+    return `${apiEndPoint}${id}/`
 }
 export async function getTodos() {
     const { data } = await http.get(apiEndPoint)
@@ -22,11 +22,10 @@ export async function deleteTodo(id) {
 }
 
 export async function saveTodo(todo) {
-    const body = { ...todo };
-    delete todo._id
-
     if (todo._id && todo._id !== "") {
+        const body = { ...todo };
+        delete body._id
         return await http.put(todosUrl(todo._id), body)
     }
-    return await http.post(apiEndPoint, body)
+    return await http.post(apiEndPoint, todo)
 }
