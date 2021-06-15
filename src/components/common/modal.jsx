@@ -42,9 +42,16 @@ export default function SimpleModal(props) {
         onClose();
     };
 
+    const childrenWithProps = React.Children.map(children, child => {
+        if (React.isValidElement(child)) {
+            return React.cloneElement(child, { handleClose });
+        }
+        return child;
+    });
+
     const body = (
         <div style={modalStyle} className={classes.paper}>
-            {children}
+            {childrenWithProps}
         </div>
     );
     return (

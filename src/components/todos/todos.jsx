@@ -3,7 +3,7 @@ import { Box, IconButton, Typography } from '@material-ui/core';
 import { toast } from 'react-toastify'
 import AddIcon from '@material-ui/icons/Add';
 
-import { deleteTodo, getTodos } from '../../services/todoService'
+import { deleteTodo, getTodos, saveTodo } from '../../services/todoService'
 import SimpleModal from '../common/modal';
 import TodosTable from './todosTable';
 import TodoItem from './todoitem';
@@ -19,7 +19,7 @@ const filterType = [
 const TodoList = () => {
     const [todos, setTodos] = useState([])
     const [sortColumn, setSortColumn] = useState({ path: 'title', order: 'asc' })
-    const [filterStatus, setFilterStatus] = useState({ status: 'all' })
+    const [filterStatus, setFilterStatus] = useState('all')
 
     const classes = useStyles()
     let filtered = []
@@ -51,12 +51,13 @@ const TodoList = () => {
 
     }
 
-    const handleChangeStatus = (todo) => {
+    const handleChangeStatus = async (todo) => {
         const newTodos = [...todos]
         const index = todos.indexOf(todo)
         newTodos[index] = { ...newTodos[index] }
         newTodos[index].completed = !newTodos[index].completed;
         setTodos(newTodos);
+        await saveTodo(newTodos[index])
     }
 
     const handleChangeFilterStatus = (event) => {
@@ -72,23 +73,28 @@ const TodoList = () => {
         return filtered
     }
 
-    const addButton = <IconButton aria-label="add task"><AddIcon /></IconButton>
-
     filtered = getFilteredData(filterStatus);
 
-    if (todos.length === 0) return <p>There is no todo in the list</p>
+    if (todos.length === 0) return (
+        <>
+            <Box m={2} className={classes.marginAuto}>
+                <Typography variant="h6">There is no todo in the list</Typography>
+                <SimpleModal title={<AddIcon />} onClose={populateTodos} className={classes.mousePointer} > <TodoItem /></SimpleModal>
+            </Box>
+        </>);
     return (
         <>
-            <Box m={2}><Typography variant="h6" color="primary">TaskList</Typography></Box>
-            <TodosTable todos={filtered}
-                onDelete={handleDelete}
-                onChangeStatus={handleChangeStatus}
-                onSort={handleSort}
-                onClose={populateTodos}
-                sortColumn={sortColumn} />
+            <Box m={2}>
+                <TodosTable todos={filtered}
+                    onDelete={handleDelete}
+                    onChangeStatus={handleChangeStatus}
+                    onSort={handleSort}
+                    onClose={populateTodos}
+                    sortColumn={sortColumn} />
+            </Box>
             <Box m={2} className={classes.marginAuto}>
                 <RadioGroupList data={filterType} value={filterStatus} handleChange={handleChangeFilterStatus} />
-                <SimpleModal title={addButton} onClose={populateTodos} > <TodoItem /></SimpleModal>
+                <SimpleModal title={<AddIcon />} onClose={populateTodos} className={classes.mousePointer} > <TodoItem /></SimpleModal>
             </Box>
         </>
     )

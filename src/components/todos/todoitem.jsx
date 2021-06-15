@@ -7,8 +7,8 @@ import Joi from 'joi-browser';
 import { validate, validateField } from '../../hooks/useValidate'
 import { useStyles } from './styles';
 
-const TodoItem = ({ todoitem }) => {
-    const [todo, setTodo] = useState({ _id: '', title: '', description: '', completed: false })
+const TodoItem = ({ todoitem, handleClose }) => {
+    const [todo, setTodo] = useState({ _id: '', title: '', description: 'description', completed: false })
     const [errors, setErrors] = useState([]);
     const methods = useForm();
     const classes = useStyles()
@@ -16,7 +16,7 @@ const TodoItem = ({ todoitem }) => {
     const schema = {
         _id: Joi.number().allow(''),
         title: Joi.string().required().label('Title'),
-        description: Joi.string().required().label('Description'),
+        description: Joi.string().label('Description'),
         completed: Joi.boolean().required().label('Completed')
     }
     const mapToViewModel = (m) => {
@@ -52,17 +52,19 @@ const TodoItem = ({ todoitem }) => {
     }
 
     const handleSubmit = (e) => {
-        console.log('1')
         e.preventDefault();
         setErrors(validate(todo, schema));
-        if (errors) {
+
+        if (errors && Object.keys(errors).length !== 0) {
             return;
         }
+
         doSubmit();
     };
 
     const doSubmit = async () => {
         await saveTodo(todo);
+        handleClose();
     }
 
 
@@ -70,8 +72,8 @@ const TodoItem = ({ todoitem }) => {
         <>
             <FormProvider {...methods}>
                 <form className={classes.marginAuto} onSubmit={(e) => handleSubmit(e, doSubmit)} noValidate>
-                    <Paper variant="outlined">
-                        <Grid container alignItems="flex-start" spacing={2}>
+                    <Paper variant="outlined" className={classes.fullWidth}>
+                        <Grid container className={classes.marginAuto} spacing={2}>
                             <FormInput
                                 name='title'
                                 label='Title'
@@ -81,15 +83,7 @@ const TodoItem = ({ todoitem }) => {
                                 size={12}
                                 autoFocus={true}
                                 error={errors && errors['title']} />
-                            <FormInput
-                                name='description'
-                                label='Description'
-                                value={todo.description}
-                                onChange={changeHandler}
-                                required
-                                size={12}
-                                error={errors && errors['description']} />
-                            <Grid item style={{ marginTop: 16 }}>
+                            <Grid item >
                                 <Button variant="contained" color="primary" type="submit" disabled={validate(todo, schema)}>Save</Button>
                             </Grid>
                         </Grid>

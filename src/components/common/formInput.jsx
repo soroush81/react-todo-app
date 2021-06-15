@@ -8,6 +8,7 @@ function FormInput({ value, error, name, size, ...rest }) {
             <Controller
                 render={({ field }) => (
                     <TextField
+                        variant="outlined"
                         fullWidth
                         {...rest}
                         name={name}

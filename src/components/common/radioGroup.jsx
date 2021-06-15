@@ -5,7 +5,7 @@ function RadioGroupList({ data, value, handleChange }) {
     return (
         <RadioGroup aria-label="filter" row name="filterStatus" value={value} onChange={handleChange}>
             {
-                data.map(item => <FormControlLabel key={item.value} value={item.value} control={<Radio />} label={item.label} />)
+                data.map(item => <FormControlLabel key={item.value} value={item.value} control={<Radio color="primary" />} label={item.label} />)
             }
         </RadioGroup>
     );

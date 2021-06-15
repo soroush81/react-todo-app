@@ -1,18 +1,16 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { grey } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles((theme) => ({
     root: {
-        width: 500,
-        backgroundColor: theme.palette.background.paper,
+        width: 400,
         margin: 'auto'
     },
-    paper: {
-        position: 'absolute',
-        width: 500,
-        backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
+    header:{
+        backgroundColor: grey[500]
+    },
+    headerTitle:{
+        color:'#fff',
     },
     addButton: {
         border: '2px solid #000'
@@ -20,6 +18,15 @@ export const useStyles = makeStyles((theme) => ({
     marginAuto: {
         display: 'flex',
         justifyContent: "center"
+    },
+    center:{
+        textAlign:'center'
+    },
+    fullWidth:{ 
+        width: '100%'
+    },
+    mousePointer:{
+        cursor: 'pointer'
     }
 }));
 

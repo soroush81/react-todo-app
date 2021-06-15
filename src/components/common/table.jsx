@@ -3,11 +3,11 @@ import { Table } from '@material-ui/core';
 import CustomTableHeader from './tableHeader'
 import CustomTableBody from './tableBody'
 
-const CustomTable = ({ onSort, columns, sortColumn, data, cssClass }) => {
+const CustomTable = ({ title, columns, data, cssClasses }) => {
     return (
         <>
-            <Table aria-label="data" className={cssClass}>
-                <CustomTableHeader onSort={onSort} columns={columns} sortColumn={sortColumn} />
+            <Table aria-label="data" className={cssClasses.root}>
+                <CustomTableHeader cssClass={cssClasses} title={title} />
                 <CustomTableBody data={data} columns={columns} />
             </Table>
         </>

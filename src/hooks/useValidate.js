@@ -4,7 +4,7 @@ export function validate(values, schema) {
     const options = { abortEarly: false };
     const { error } = Joi.validate(values, schema, options)
     if (!error) return;
-    const errs = {}
+    const errs = {};
     for (let err of error.details) {
         errs[err.path[0]] = err.message;
     }
