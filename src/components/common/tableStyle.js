@@ -6,5 +6,5 @@ export const useStyles = makeStyles((theme) => ({
         '&:nth-of-type(even)': {
             backgroundColor: grey[200],
           }
-    }
+    },
 }));

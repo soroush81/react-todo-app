@@ -3,17 +3,14 @@ import { grey } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles((theme) => ({
     root: {
-        width: 400,
+        width: '370px',
         margin: 'auto'
     },
-    header:{
+    listHeader:{
         backgroundColor: grey[500]
     },
     headerTitle:{
         color:'#fff',
-    },
-    addButton: {
-        border: '2px solid #000'
     },
     marginAuto: {
         display: 'flex',
@@ -27,6 +24,15 @@ export const useStyles = makeStyles((theme) => ({
     },
     mousePointer:{
         cursor: 'pointer'
+    },
+    titleColumnWidth:{
+        width: '320px', 
+        padding:0,
+        margin:0
+    },
+    templateColumnWidth:{
+        padding:0,
+        margin:0
     }
 }));
 

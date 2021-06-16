@@ -16,13 +16,17 @@ const CustomTableBody = ({ data, columns }) => {
         return Math.random() + item._id + (column.path || column.key);
     }
 
+    const getColumnStyle = (column) => {
+        return (column.style) ? column.style : "";
+    }
+
     return (
         <>
             <TableBody>
                 {data.map(item => (
                     <TableRow key={item._id || Math.random()} className={classes.tableRow}>
                         {columns.map(col =>
-                            <TableCell align="center" key={createKey(item, col)} style={{ padding: "0" }}>
+                            <TableCell align="left" key={createKey(item, col)} className={getColumnStyle(col)}>
                                 {renderCell(item, col)}
                             </TableCell>)}
                     </TableRow>))}

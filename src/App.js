@@ -6,7 +6,6 @@ import {blue, orange} from '@material-ui/core/colors';
 import TodoList from './components/todos/todos';
 import TodoItem from './components/todos/todoitem';
 import ElevationScroll from './components/navigations/elevationScroll'
-import SimpleBottomNavigation from './components/navigations/bottomNavigation'
 
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css'
