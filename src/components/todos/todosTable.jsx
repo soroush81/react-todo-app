@@ -31,7 +31,7 @@ const TodosTable = ({ todos, onDelete, onChangeStatus, onSort, onClose, sortColu
 
     return (
         <>
-            <CustomTable onSort={onSort} sortColumn={sortColumn} data={todos} columns={columns} title="TO-DO LIST" cssClasses={classes} />
+            <CustomTable onSort={onSort} sortColumn={sortColumn} data={todos} columns={columns} title="TODO LIST" cssClasses={classes} />
         </>)
 }
 

@@ -1,18 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import useScrollTrigger from '@material-ui/core/useScrollTrigger';
-import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
+import { Typography, Toolbar, AppBar, CssBaseline, useScrollTrigger, Box, Container } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import AppMenu from './appMenu'
 
 function ElevationScroll(props) {
     const { children, window } = props;
-    // Note that you normally won't need to set the window ref as useScrollTrigger
-    // will default to window.
-    // This is only being set here because the demo is in an iframe.
+
     const trigger = useScrollTrigger({
         disableHysteresis: true,
         threshold: 0,
@@ -26,21 +20,29 @@ function ElevationScroll(props) {
 
 ElevationScroll.propTypes = {
     children: PropTypes.element.isRequired,
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
     window: PropTypes.func,
 };
 
 export default function ElevateAppBar(props) {
+
+    const logoStyle =
+    {
+        textDecoration: "none",
+        padding: 20,
+        color: 'white'
+    }
+
+
     return (
-        <React.Fragment>
+        <>
             <CssBaseline />
             <ElevationScroll {...props}>
                 <AppBar>
-                    <Toolbar>
-                        <Typography variant="h5">TODO APP</Typography>
+                    <Toolbar style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography variant="h5"><Link to="/" style={logoStyle}>
+                            TODO APP
+                        </Link></Typography>
+                        <AppMenu user={props.user} />
                     </Toolbar>
                 </AppBar>
             </ElevationScroll>
@@ -49,6 +51,6 @@ export default function ElevateAppBar(props) {
                 <Box my={2}>
                 </Box>
             </Container>
-        </React.Fragment>
+        </>
     );
 }

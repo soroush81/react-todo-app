@@ -2,15 +2,17 @@ import { ToastContainer } from 'react-toastify';
 import { Route, Switch } from 'react-router-dom'
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/core';
-import {blue, orange} from '@material-ui/core/colors';
+import { blue, orange } from '@material-ui/core/colors';
 import TodoList from './components/todos/todos';
 import TodoItem from './components/todos/todoitem';
 import ElevationScroll from './components/navigations/elevationScroll'
 
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css'
+import Login from './components/auth/login';
+import Register from './components/auth/register';
 
-const font =  "'Montserrat', sans-serif";
+const font = "'Montserrat', sans-serif";
 
 const theme = createMuiTheme({
   typography: {
@@ -39,12 +41,14 @@ function App() {
         <ToastContainer />
         <ElevationScroll />
         <Switch>
+          <Route path='/login' component={Login} />
           <Route path='/todos/:id' component={TodoItem} />
+          <Route path='/register' component={Register} />
           <Route path="/todos" component={TodoList} />
           <Route path="/" exact component={TodoList} />
         </Switch>
         {/* <SimpleBottomNavigation /> */}
-        </ThemeProvider>
+      </ThemeProvider>
     </>
   );
 }
