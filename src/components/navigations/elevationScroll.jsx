@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Typography, Toolbar, AppBar, CssBaseline, useScrollTrigger, Box, Container } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import AppMenu from './appMenu'
-
+import { useStyles } from './style'
 function ElevationScroll(props) {
     const { children, window } = props;
 
@@ -24,22 +24,15 @@ ElevationScroll.propTypes = {
 };
 
 export default function ElevateAppBar(props) {
-
-    const logoStyle =
-    {
-        textDecoration: "none",
-        padding: 20,
-        color: 'white'
-    }
-
+    const classes = useStyles()
 
     return (
         <>
             <CssBaseline />
             <ElevationScroll {...props}>
                 <AppBar>
-                    <Toolbar style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography variant="h5"><Link to="/" style={logoStyle}>
+                    <Toolbar className={classes.toolbar}>
+                        <Typography variant="h5"><Link to="/" className={classes.logoStyle}>
                             TODO APP
                         </Link></Typography>
                         <AppMenu user={props.user} />

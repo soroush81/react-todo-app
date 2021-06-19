@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Box, IconButton, Typography } from '@material-ui/core';
+import { Box, Hidden, Typography } from '@material-ui/core';
 import { toast } from 'react-toastify'
 import AddIcon from '@material-ui/icons/Add';
 
 import { deleteTodo, getTodos, saveTodo } from '../../services/todoService'
+import { getCategories } from '../../services/categoryService'
 import SimpleModal from '../common/modal';
 import TodosTable from './todosTable';
 import TodoItem from './todoitem';
 import RadioGroupList from '../common/radioGroup';
+import ListGroup from '../common/listGroup'
 import { useStyles } from './styles';
 
 
@@ -16,8 +18,11 @@ const filterType = [
     { value: "completed", label: "Completed" },
     { value: "uncompleted", label: "Uncompleted" }
 ]
+
 const TodoList = () => {
     const [todos, setTodos] = useState([])
+    const [categories, SetCategories] = useState([])
+    const [selectedCategory, setSelectedCategory] = useState(null)
     const [sortColumn, setSortColumn] = useState({ path: 'title', order: 'asc' })
     const [filterStatus, setFilterStatus] = useState('all')
 
@@ -25,8 +30,14 @@ const TodoList = () => {
     let filtered = []
 
     useEffect(async () => {
+        await populateCatgeories()
         await populateTodos()
     }, [])
+
+    const populateCatgeories = async () => {
+        SetCategories(await getCategories());
+        console.log(categories)
+    }
 
     const populateTodos = async () => {
         setTodos(await getTodos());
@@ -67,9 +78,15 @@ const TodoList = () => {
         setSortColumn(sortColumn)
     }
 
+    const handleCategorySelect = (category) => {
+        setSelectedCategory(category)
+    }
+
+
     const getFilteredData = (filter) => {
         const status = (filter === 'completed') ? true : false;
-        filtered = (filter === 'all') ? todos : todos.filter(todo => todo.completed == status)
+        filtered = (selectedCategory && selectedCategory._id) ? todos.filter(todo => todo.category._id === selectedCategory._id) : todos;
+        filtered = (filter === 'all') ? filtered : filtered.filter(todo => todo.completed == status)
         return filtered
     }
 
@@ -77,24 +94,37 @@ const TodoList = () => {
 
     if (todos.length === 0) return (
         <>
-            <Box m={2} className={classes.marginAuto}>
+            <Box m={2} className={classes.flexCenter}>
                 <Typography variant="h6">There is no todo in the list</Typography>
                 <SimpleModal title={<AddIcon />} onClose={populateTodos} className={classes.mousePointer} > <TodoItem /></SimpleModal>
             </Box>
         </>);
+
+
     return (
         <>
-            <Box m={2}>
-                <TodosTable todos={filtered}
-                    onDelete={handleDelete}
-                    onChangeStatus={handleChangeStatus}
-                    onSort={handleSort}
-                    onClose={populateTodos}
-                    sortColumn={sortColumn} />
-            </Box>
-            <Box m={2} className={classes.marginAuto}>
-                <RadioGroupList data={filterType} value={filterStatus} handleChange={handleChangeFilterStatus} />
-                <SimpleModal title={<AddIcon />} onClose={populateTodos} className={classes.mousePointer} > <TodoItem /></SimpleModal>
+            <Box display="flex" p={1}>
+                <Hidden smDown>
+                    <Box p={1} xs={2} style={{ width: '15%' }}>
+                        <ListGroup title="Categories" items={categories} selectedItem={selectedCategory} onItemSelect={handleCategorySelect} />
+                    </Box>
+                </Hidden>
+                <Box className={classes.marginAuto}>
+                    <Box m={2}>
+                        <TodosTable todos={filtered}
+                            onDelete={handleDelete}
+                            onChangeStatus={handleChangeStatus}
+                            onSort={handleSort}
+                            onClose={populateTodos}
+                            sortColumn={sortColumn} />
+                    </Box>
+                    <Box m={2} className={classes.flexCenter}>
+                        <RadioGroupList data={filterType} value={filterStatus} handleChange={handleChangeFilterStatus} />
+                        <SimpleModal title={<AddIcon />} onClose={populateTodos} className={classes.mousePointer} > <TodoItem /></SimpleModal>
+                    </Box>
+                </Box>
+                <Box p={1} xs={2} style={{ width: '15%' }}>
+                </Box>
             </Box>
         </>
     )
