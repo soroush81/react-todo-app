@@ -2,13 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { getTodo, saveTodo } from '../../services/todoService'
 import { Paper, Grid, Button } from '@material-ui/core';
 import FormInput from '../common/formInput'
+import FormSelect from '../common/formSelect'
 import { useForm, FormProvider } from 'react-hook-form';
 import Joi from 'joi-browser';
 import { validate, validateField } from '../../hooks/useValidate'
 import { useStyles } from './styles';
+import { getCategories } from '../../services/categoryService'
+
 
 const TodoItem = ({ todoitem, handleClose }) => {
-    const [todo, setTodo] = useState({ _id: '', title: '', description: 'description', completed: false })
+    const [categories, setCategories] = useState([])
+    const [todo, setTodo] = useState({ _id: '', title: '', categoryId: '', description: 'description', completed: false })
     const [errors, setErrors] = useState([]);
     const methods = useForm();
     const classes = useStyles()
@@ -16,6 +20,7 @@ const TodoItem = ({ todoitem, handleClose }) => {
     const schema = {
         _id: Joi.number().allow(''),
         title: Joi.string().required().label('Title'),
+        categoryId: Joi.number().required().label('Category'),
         description: Joi.string().label('Description'),
         completed: Joi.boolean().required().label('Completed')
     }
@@ -23,6 +28,7 @@ const TodoItem = ({ todoitem, handleClose }) => {
         setTodo({
             _id: m._id,
             title: m.title,
+            categoryId: m.category._id,
             description: m.description,
             completed: m.completed
         })
@@ -39,15 +45,28 @@ const TodoItem = ({ todoitem, handleClose }) => {
         }
     }
 
+    const populateCategories = async () => {
+        setCategories(await getCategories());
+    }
+
+
 
     useEffect(async () => {
         await populateTodo();
+        await populateCategories();
     }, []);
 
     const changeHandler = ({ target: input }) => {
         setErrors(validateField(input, schema, errors));
         const newTodo = { ...todo };
         newTodo[input.name] = input.value;
+        setTodo(newTodo);
+    }
+
+    const selectHandler = ({ target: input }, path) => {
+        setErrors(validateField(input, schema, errors));
+        const newTodo = { ...todo };
+        newTodo[path] = input.value;
         setTodo(newTodo);
     }
 
@@ -63,7 +82,12 @@ const TodoItem = ({ todoitem, handleClose }) => {
     };
 
     const doSubmit = async () => {
-        await saveTodo(todo);
+        let body = { ...todo }
+        delete body.categoryId
+        const index = categories.findIndex(c => c._id === todo.categoryId)
+        body = { ...body, category: categories[index] }
+
+        await saveTodo(body);
         handleClose();
     }
 
@@ -71,9 +95,9 @@ const TodoItem = ({ todoitem, handleClose }) => {
     return (
         <>
             <FormProvider {...methods}>
-                <form className={classes.marginAuto} onSubmit={(e) => handleSubmit(e, doSubmit)} noValidate>
+                <form className={classes.flexCenter} onSubmit={(e) => handleSubmit(e, doSubmit)} noValidate>
                     <Paper variant="outlined" className={classes.fullWidth}>
-                        <Grid container className={classes.marginAuto} spacing={2}>
+                        <Grid container className={classes.flexCenter} spacing={2}>
                             <FormInput
                                 name='title'
                                 label='Title'
@@ -83,6 +107,15 @@ const TodoItem = ({ todoitem, handleClose }) => {
                                 size={12}
                                 autoFocus={true}
                                 error={errors && errors['title']} />
+                            <FormSelect
+                                id='categoryId'
+                                label='Category'
+                                items={categories}
+                                labelId='categorySelectLabel'
+                                selectedId={todo.categoryId}
+                                onChange={(e) => selectHandler(e, 'categoryId')}
+                                required
+                                size={12} />
                             <Grid item >
                                 <Button variant="contained" color="primary" type="submit" disabled={validate(todo, schema)}>Save</Button>
                             </Grid>

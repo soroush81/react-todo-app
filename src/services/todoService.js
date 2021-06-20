@@ -22,6 +22,7 @@ export async function deleteTodo(id) {
 }
 
 export async function saveTodo(todo) {
+    console.log(todo)
     if (todo._id && todo._id !== "") {
         const body = { ...todo };
         delete body._id

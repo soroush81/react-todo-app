@@ -2,26 +2,15 @@ import React from 'react'
 import MenuIcon from '@material-ui/icons/Menu'
 import { Hidden, IconButton, Menu, MenuItem, Box } from '@material-ui/core'
 import { Link, NavLink } from 'react-router-dom';
-
+import { useStyles } from './style'
 const AppMenu = ({ user }) => {
-    const navLinkStyle =
-    {
-        textDecoration: "none",
-        padding: 20,
-        color: 'white'
-    }
 
-    const activeNavLinkStyle = {
-        background: 'orange',
-        color: 'blue'
-    }
-
+    const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -31,14 +20,15 @@ const AppMenu = ({ user }) => {
                 <Hidden xsDown >
                     {!user &&
                         <>
-                            <NavLink to="/login" style={navLinkStyle} activeStyle={activeNavLinkStyle} >Login</NavLink>
-                            <NavLink to="/register" style={navLinkStyle} activeStyle={activeNavLinkStyle} >SignUp</NavLink>
+                            <NavLink to="/login" className={classes.navLinkStyle} activeClassName={classes.activeNavLinkStyle} >Login</NavLink>
+                            <NavLink to="/register" className={classes.navLinkStyle} activeClassName={classes.activeNavLinkStyle} >SignUp</NavLink>
                         </>
                     }
                     {user &&
                         <>
-                            <NavLink to="/profile" style={navLinkStyle} activeStyle={activeNavLinkStyle} >{user.name}</NavLink>
-                            <NavLink to="/logout" style={navLinkStyle} activeStyle={activeNavLinkStyle} >Logout</NavLink>
+                            <NavLink to="/todos/today" className={classes.navLinkStyle} activeClassName={classes.activeNavLinkStyle} >Today</NavLink>
+                            <NavLink to="/profile" className={classes.navLinkStyle} activeClassName={classes.activeNavLinkStyle} >{user.name}</NavLink>
+                            <NavLink to="/logout" className={classes.navLinkStyle} activeClassName={classes.activeNavLinkStyle} >Logout</NavLink>
                         </>}
                 </Hidden>
             </Box>
@@ -54,15 +44,16 @@ const AppMenu = ({ user }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             > {!user &&
-                <>
+                <Box>
                     <MenuItem onClick={handleClose} component={Link} to="/login" style={{ width: "150px" }}>Login</MenuItem>
                     <MenuItem onClick={handleClose} component={Link} to="/register">SignUp</MenuItem>
-                </>}
+                    {/* <MenuItem onClick={handleClose} component={Link} to="/todos/roday">Today</MenuItem> */}
+                </Box>}
                 {user &&
-                    <>
+                    <Box>
                         <MenuItem onClick={handleClose} component={Link} to="/profile">Profile</MenuItem>
                         <MenuItem onClick={handleClose} component={Link} to="/logout">Logout</MenuItem>
-                    </>}
+                    </Box>}
             </Menu>
         </>
     )

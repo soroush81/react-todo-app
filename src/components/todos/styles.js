@@ -6,33 +6,36 @@ export const useStyles = makeStyles((theme) => ({
         width: '370px',
         margin: 'auto'
     },
-    listHeader:{
+    listHeader: {
         backgroundColor: grey[500]
     },
-    headerTitle:{
-        color:'#fff',
+    headerTitle: {
+        color: '#fff',
     },
-    marginAuto: {
+    flexCenter: {
         display: 'flex',
         justifyContent: "center"
     },
-    center:{
-        textAlign:'center'
+    marginAuto: {
+        margin: '0 auto'
     },
-    fullWidth:{ 
+    center: {
+        textAlign: 'center'
+    },
+    fullWidth: {
         width: '100%'
     },
-    mousePointer:{
+    mousePointer: {
         cursor: 'pointer'
     },
-    titleColumnWidth:{
-        width: '320px', 
-        padding:0,
-        margin:0
+    titleColumnWidth: {
+        width: '320px',
+        padding: 0,
+        margin: 0
     },
-    templateColumnWidth:{
-        padding:0,
-        margin:0
+    templateColumnWidth: {
+        padding: 0,
+        margin: 0
     }
 }));
 

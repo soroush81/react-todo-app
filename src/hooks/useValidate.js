@@ -8,6 +8,7 @@ export function validate(values, schema) {
     for (let err of error.details) {
         errs[err.path[0]] = err.message;
     }
+    console.log(errs)
     return errs;
 }
 
