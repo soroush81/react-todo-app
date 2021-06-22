@@ -9,12 +9,12 @@ import { validate, validateField } from '../../hooks/useValidate'
 import authService from '../../services/authService'
 
 const Login = ({ location }) => {
-    const [user, setUser] = useState({ _id: '', username: '', password: '' });
+    const [user, setUser] = useState({ id: '', username: '', password: '' });
     const [errors, setErrors] = useState([]);
     const methods = useForm();
 
     const schema = {
-        _id: Joi.number().allow(''),
+        id: Joi.number().allow(''),
         username: Joi.string().required().label('UserName'),
         password: Joi.string().label('Password'),
     }

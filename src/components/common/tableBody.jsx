@@ -13,7 +13,7 @@ const CustomTableBody = ({ data, columns }) => {
     }
 
     const createKey = (item, column) => {
-        return Math.random() + item._id + (column.path || column.key);
+        return Math.random() + item.id + (column.path || column.key);
     }
 
     const getColumnStyle = (column) => {
@@ -24,7 +24,7 @@ const CustomTableBody = ({ data, columns }) => {
         <>
             <TableBody>
                 {data.map(item => (
-                    <TableRow key={item._id || Math.random()} className={classes.tableRow}>
+                    <TableRow key={item.id || Math.random()} className={classes.tableRow}>
                         {columns.map(col =>
                             <TableCell align="left" key={createKey(item, col)} className={getColumnStyle(col)}>
                                 {renderCell(item, col)}

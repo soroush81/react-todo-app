@@ -22,11 +22,10 @@ export async function deleteTodo(id) {
 }
 
 export async function saveTodo(todo) {
-    console.log(todo)
-    if (todo._id && todo._id !== "") {
+    if (todo.id && todo.id !== "") {
         const body = { ...todo };
-        delete body._id
-        return await http.put(todosUrl(todo._id), body)
+        delete body.id
+        return await http.put(todosUrl(todo.id), body)
     }
     return await http.post(apiEndPoint, todo)
 }

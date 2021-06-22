@@ -11,34 +11,38 @@ import { getCategories } from '../../services/categoryService'
 
 
 const TodoItem = ({ todoitem, handleClose }) => {
+    const currentUser = { id: '1', name: 'soodeh', email: 'sebrahimi60@yahoo.com', password: '123456' }
     const [categories, setCategories] = useState([])
-    const [todo, setTodo] = useState({ _id: '', title: '', categoryId: '', description: 'description', completed: false })
+    const [todo, setTodo] = useState({ id: '', title: '', categoryId: 5, description: 'description', completed: false, userId: currentUser.id })
     const [errors, setErrors] = useState([]);
     const methods = useForm();
     const classes = useStyles()
 
     const schema = {
-        _id: Joi.number().allow(''),
+        id: Joi.number().allow(''),
         title: Joi.string().required().label('Title'),
         categoryId: Joi.number().required().label('Category'),
         description: Joi.string().label('Description'),
-        completed: Joi.boolean().required().label('Completed')
+        completed: Joi.boolean().required().label('Completed'),
+        userId: Joi.number().label('User')
     }
     const mapToViewModel = (m) => {
         setTodo({
-            _id: m._id,
+            id: m.id,
             title: m.title,
-            categoryId: m.category._id,
+            categoryId: m.category.id,
             description: m.description,
-            completed: m.completed
+            completed: m.completed,
+            userId: currentUser.id
         })
     }
 
     const populateTodo = async () => {
         try {
-            const todoId = todoitem._id;
+            const todoId = todoitem.id;
             if (todoId === "new") return;
             const _todo = await getTodo(todoId);
+            _todo['userId'] = currentUser.id
             mapToViewModel(_todo);
         }
         catch (ex) {
@@ -48,8 +52,6 @@ const TodoItem = ({ todoitem, handleClose }) => {
     const populateCategories = async () => {
         setCategories(await getCategories());
     }
-
-
 
     useEffect(async () => {
         await populateTodo();
@@ -82,12 +84,13 @@ const TodoItem = ({ todoitem, handleClose }) => {
     };
 
     const doSubmit = async () => {
-        let body = { ...todo }
-        delete body.categoryId
-        const index = categories.findIndex(c => c._id === todo.categoryId)
-        body = { ...body, category: categories[index] }
+        let newTodo = { ...todo }
+        delete newTodo.categoryId
+        delete newTodo.userId
+        const index = categories.findIndex(c => c.id === todo.categoryId)
+        newTodo = { ...newTodo, category: categories[index], user: currentUser }
 
-        await saveTodo(body);
+        await saveTodo(newTodo);
         handleClose();
     }
 

@@ -36,7 +36,6 @@ const TodoList = () => {
 
     const populateCatgeories = async () => {
         SetCategories(await getCategories());
-        console.log(categories)
     }
 
     const populateTodos = async () => {
@@ -51,7 +50,7 @@ const TodoList = () => {
         const originalTodos = todos;
 
         try {
-            const filtered = todos.filter(m => m._id !== id)
+            const filtered = todos.filter(m => m.id !== id)
             setTodos(filtered)
             await deleteTodo(id);
         } catch (ex) {
@@ -85,7 +84,7 @@ const TodoList = () => {
 
     const getFilteredData = (filter) => {
         const status = (filter === 'completed') ? true : false;
-        filtered = (selectedCategory && selectedCategory._id) ? todos.filter(todo => todo.category._id === selectedCategory._id) : todos;
+        filtered = (selectedCategory && selectedCategory.id) ? todos.filter(todo => todo.category.id === selectedCategory.id) : todos;
         filtered = (filter === 'all') ? filtered : filtered.filter(todo => todo.completed == status)
         return filtered
     }

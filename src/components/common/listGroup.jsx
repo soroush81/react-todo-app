@@ -17,7 +17,6 @@ const ListGroup = ({ items, title, onItemSelect, textProperty, valueProperty, se
             >
                 {items.map(item => (
                     <>
-                        {console.log(item[valueProperty])}
                         <ListItem button selected={selectedItem === item} key={Math.random()} onClick={() => onItemSelect(item)}>
                             <ListItemText
                                 disableTypography
@@ -35,6 +34,6 @@ const ListGroup = ({ items, title, onItemSelect, textProperty, valueProperty, se
 
 ListGroup.defaultProps = {
     textProperty: 'name',
-    valueProperty: '_id'
+    valueProperty: 'id'
 }
 export default ListGroup;
