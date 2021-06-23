@@ -26,7 +26,7 @@ const TodosTable = ({ todos, onDelete, onChangeStatus, onSort, onClose, sortColu
     const columns = [
         { path: "title", adminVisible: true, style: classes.titleColumnWidth, content: todo => <SimpleModal title={getTitle(todo)} buttonStyle={titleStyle(todo)} onClose={onClose} ><TodoItem todoitem={todo} /></SimpleModal> },
         { path: "completed", adminVisible: true, style: classes.templateColumnWidth, content: todo => <Checkbox checked={todo.completed} onChange={() => onChangeStatus(todo)} /> },
-        { key: "delete", adminVisible: true, style: classes.templateColumnWidth, content: todo => <IconButton variant="contained" color="secondary" onClick={() => onDelete(todo._id)}><DeleteIcon /></IconButton> }
+        { key: "delete", adminVisible: true, style: classes.templateColumnWidth, content: todo => <IconButton variant="contained" color="secondary" onClick={() => onDelete(todo.id)}><DeleteIcon /></IconButton> }
     ];
 
     return (
