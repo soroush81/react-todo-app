@@ -13,7 +13,7 @@ const Register = ({ history }) => {
     const methods = useForm();
 
     const schema = {
-        username: Joi.string().email().required().label('Username'),
+        username: Joi.string().username().required().label('Username'),
         password: Joi.string().min(5).required().label('Password'),
         name: Joi.string().required().label('Name')
     }

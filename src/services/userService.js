@@ -8,7 +8,7 @@ function userUrl(id) {
 
 export async function register(user) {
     return await http.post(apiEndPoint, {
-        email: user.username,
+        username: user.username,
         password: user.password,
         name: user.name
     }, user)

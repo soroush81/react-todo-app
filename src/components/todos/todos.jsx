@@ -39,7 +39,7 @@ const TodoList = () => {
     }
 
     const populateTodos = async () => {
-        setTodos(await getTodos());
+        setTodos(await getTodos(1));
     }
 
     useEffect(() => {

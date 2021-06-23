@@ -6,9 +6,10 @@ const apiEndPoint = "/todos/";
 function todosUrl(id) {
     return `${apiEndPoint}${id}/`
 }
-export async function getTodos() {
+export async function getTodos(userId) {
     const { data } = await http.get(apiEndPoint)
     todos = data;
+    todos = todos.filter(todo => todo.user && todo.user.id === userId)
     return todos;
 }
 
