@@ -7,10 +7,12 @@ function userUrl(id) {
 }
 
 export async function register(user) {
-    return await http.post(apiEndPoint, {
+    return await http.post('http://localhost:8080/register/', {
         username: user.username,
         password: user.password,
-        name: user.name
+        first_name: user.firstname,
+        last_name: user.lastname,
+        email: user.email
     }, user)
 }
 

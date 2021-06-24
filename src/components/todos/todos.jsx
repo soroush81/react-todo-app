@@ -11,6 +11,7 @@ import TodoItem from './todoitem';
 import RadioGroupList from '../common/radioGroup';
 import ListGroup from '../common/listGroup'
 import { useStyles } from './styles';
+import authService from '../../services/authService'
 
 
 const filterType = [
@@ -25,6 +26,7 @@ const TodoList = () => {
     const [selectedCategory, setSelectedCategory] = useState(null)
     const [sortColumn, setSortColumn] = useState({ path: 'title', order: 'asc' })
     const [filterStatus, setFilterStatus] = useState('all')
+    const currentUser = authService.getCurrentUser()
 
     const classes = useStyles()
     let filtered = []

@@ -38,7 +38,8 @@ const Login = ({ location }) => {
 
     const doSubmit = async (e) => {
         try {
-            await authService.login(user.username, user.password)
+            const { data } = await authService.login(user.username, user.password)
+
             window.location = (location.state) ? location.state.from.pathname : '/';
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {

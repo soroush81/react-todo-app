@@ -41,13 +41,12 @@ function App() {
         <ToastContainer />
         <ElevationScroll />
         <Switch>
-          <Route path='/login' component={Login} />
           <Route path='/todos/:id' component={TodoItem} />
           <Route path='/register' component={Register} />
+          <Route path='/login' component={Login} />
           <Route path="/todos" component={TodoList} />
           <Route path="/" exact component={TodoList} />
         </Switch>
-        {/* <SimpleBottomNavigation /> */}
       </ThemeProvider>
     </>
   );

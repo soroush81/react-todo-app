@@ -8,14 +8,17 @@ import { validateField, validate } from '../../hooks/useValidate'
 import auth from '../../services/authService'
 
 const Register = ({ history }) => {
-    const [user, setUser] = useState({ username: '', password: '', name: '' });
+    const [user, setUser] = useState({ username: '', password: '', firstname: '', lastname: '', email: '' });
     const [errors, setErrors] = useState([]);
     const methods = useForm();
 
     const schema = {
-        username: Joi.string().username().required().label('Username'),
+        username: Joi.string().required().label('Username'),
         password: Joi.string().min(5).required().label('Password'),
-        name: Joi.string().required().label('Name')
+        firstname: Joi.string().required().label('FirstName'),
+        lastname: Joi.string().required().label('LastName'),
+        email: Joi.string().required().label('Email')
+
     }
 
     const handleSubmit = (e) => {
@@ -74,13 +77,29 @@ const Register = ({ history }) => {
                                 type='password'
                                 error={errors && errors['username']} />
                             <FormInput
-                                name='name'
-                                label='Name'
-                                value={user.name}
+                                name='firstname'
+                                label='FirstName'
+                                value={user.firstname}
                                 onChange={changeHandler}
                                 required
                                 size={12}
-                                error={errors && errors['name']} />
+                                error={errors && errors['firstname']} />
+                            <FormInput
+                                name='lastname'
+                                label='LarstName'
+                                value={user.larstname}
+                                onChange={changeHandler}
+                                required
+                                size={12}
+                                error={errors && errors['larstname']} />
+                            <FormInput
+                                name='email'
+                                label='Email'
+                                value={user.email}
+                                onChange={changeHandler}
+                                required
+                                size={12}
+                                error={errors && errors['email']} />
                             <Grid item style={{ marginTop: 16 }}>
                                 <Button variant="contained" color="primary" type="submit" disabled={validate(user, schema)}>Register</Button>
                             </Grid>

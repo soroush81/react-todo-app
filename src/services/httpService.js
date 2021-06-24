@@ -4,6 +4,14 @@ import logger from './logService'
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
+axios.interceptors.request.use(function (config) {
+    const token = localStorage.getItem("token")
+    if (token)
+        config.headers.Authorization =  `Token ${token}`;
+
+    return config;
+});
+
 axios.interceptors.response.use(null, error => {
     const expectedError = error.response && error.response.status >= 400 && error.response.status < 500
 
