@@ -86,12 +86,12 @@ const Register = ({ history }) => {
                                 error={errors && errors['firstname']} />
                             <FormInput
                                 name='lastname'
-                                label='LarstName'
-                                value={user.larstname}
+                                label='LastName'
+                                value={user.lastname}
                                 onChange={changeHandler}
                                 required
                                 size={12}
-                                error={errors && errors['larstname']} />
+                                error={errors && errors['lastname']} />
                             <FormInput
                                 name='email'
                                 label='Email'

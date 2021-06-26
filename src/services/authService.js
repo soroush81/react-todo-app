@@ -7,14 +7,15 @@ const tokenKey = "token"
 
 export async function login(username, password) {
     const { data } = await http.post("http://localhost:8080/login/", { username, password });
-    localStorage.setItem(tokenKey, data.token)
+    localStorage.setItem(tokenKey, data['token'])
     return data
 }
 
 export function getCurrentUser() {
     try {
         const jwt = localStorage.getItem(tokenKey)
-        return jwtDecode(jwt)
+        const a = jwtDecode(jwt)
+        return a
     } catch (ex) {
         return null;
     }
