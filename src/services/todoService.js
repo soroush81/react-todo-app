@@ -15,6 +15,7 @@ export async function getTodos(userId) {
 
 export async function getTodo(id) {
     const { data } = await http.get(todosUrl(id));
+    console.log(data)
     return data;
 }
 

@@ -2,20 +2,19 @@ import http from './httpService';
 import jwtDecode from 'jwt-decode'
 
 
-const apiEndPoint = "/login";
+const apiEndPoint = "/token/";
 const tokenKey = "token"
 
 export async function login(username, password) {
-    const { data } = await http.post("http://localhost:8080/login/", { username, password });
-    localStorage.setItem(tokenKey, data['token'])
+    const { data } = await http.post(apiEndPoint, { username, password });
+    localStorage.setItem(tokenKey, data['access'])
     return data
 }
 
 export function getCurrentUser() {
     try {
         const jwt = localStorage.getItem(tokenKey)
-        //const a = jwtDecode(jwt)
-        return jwt
+        return jwtDecode(jwt)
     } catch (ex) {
         return null;
     }

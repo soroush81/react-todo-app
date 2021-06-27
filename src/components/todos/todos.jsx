@@ -20,13 +20,12 @@ const filterType = [
     { value: "uncompleted", label: "Uncompleted" }
 ]
 
-const TodoList = () => {
+const TodoList = ({ user }) => {
     const [todos, setTodos] = useState([])
     const [categories, SetCategories] = useState([])
     const [selectedCategory, setSelectedCategory] = useState(null)
     const [sortColumn, setSortColumn] = useState({ path: 'title', order: 'asc' })
     const [filterStatus, setFilterStatus] = useState('all')
-    const currentUser = authService.getCurrentUser()
 
     const classes = useStyles()
     let filtered = []

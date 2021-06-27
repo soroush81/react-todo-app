@@ -10,8 +10,8 @@ import { useStyles } from './styles';
 import { getCategories } from '../../services/categoryService'
 
 
-const TodoItem = ({ todoitem, handleClose }) => {
-    const currentUser = { id: '1', name: 'soodeh', username: 'sebrahimi60@yahoo.com', password: '123456' }
+const TodoItem = ({ todoitem, handleClose, user }) => {
+    const currentUser = { id: '1', first_name: 'soodeh', username: 'sebrahimi60@yahoo.com', password: '123456' }
     const [categories, setCategories] = useState([])
     const [todo, setTodo] = useState({ id: '', title: '', categoryId: 5, description: 'description', completed: false, userId: currentUser.id })
     const [errors, setErrors] = useState([]);

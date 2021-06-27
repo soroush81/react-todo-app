@@ -1,3 +1,4 @@
+import React,{useState, useEffect} from 'react'
 import { ToastContainer } from 'react-toastify';
 import { Route, Switch } from 'react-router-dom'
 import { createMuiTheme } from '@material-ui/core/styles';
@@ -6,6 +7,8 @@ import { blue, orange } from '@material-ui/core/colors';
 import TodoList from './components/todos/todos';
 import TodoItem from './components/todos/todoitem';
 import ElevationScroll from './components/navigations/elevationScroll'
+import auth from './services/authService'
+
 
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css'
@@ -35,17 +38,27 @@ const theme = createMuiTheme({
 });
 
 function App() {
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    try {
+
+      setUser(auth.getCurrentUser())
+    } catch (ex) {
+
+    }
+  }, [])
   return (
     <>
       <ThemeProvider theme={theme}>
         <ToastContainer />
-        <ElevationScroll />
+        <ElevationScroll user={user} />
         <Switch>
-          <Route path='/todos/:id' component={TodoItem} />
+          <Route path='/todos/:id' component={TodoItem} user={user} />
           <Route path='/register' component={Register} />
           <Route path='/login' component={Login} />
-          <Route path="/todos" component={TodoList} />
-          <Route path="/" exact component={TodoList} />
+          <Route path="/todos" component={TodoList} user={user} />
+          <Route path="/" exact component={TodoList} user={user} />
         </Switch>
       </ThemeProvider>
     </>

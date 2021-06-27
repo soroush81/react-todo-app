@@ -7,10 +7,8 @@ function categoriesUrl(id) {
     return `${apiEndPoint}${id}/`
 }
 export async function getCategories() {
-    console.log('mmmmmmmmmmmmmmmmmmm')
     const { data } = await http.get(apiEndPoint)
     categories = data;
-    console.log(data)
     return categories;
 }
 

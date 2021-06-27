@@ -14,6 +14,7 @@ const AppMenu = ({ user }) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
     return (
         <>
             <Box>
