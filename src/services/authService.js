@@ -14,8 +14,8 @@ export async function login(username, password) {
 export function getCurrentUser() {
     try {
         const jwt = localStorage.getItem(tokenKey)
-        const a = jwtDecode(jwt)
-        return a
+        //const a = jwtDecode(jwt)
+        return jwt
     } catch (ex) {
         return null;
     }
