@@ -82,7 +82,7 @@ const TodoList = ({ user }) => {
         setSelectedCategory(category)
     }
 
-
+    console.log(user)
     const getFilteredData = (filter) => {
         const status = (filter === 'completed') ? true : false;
         filtered = (selectedCategory && selectedCategory.id) ? todos.filter(todo => todo.category.id === selectedCategory.id) : todos;
@@ -116,7 +116,8 @@ const TodoList = ({ user }) => {
                             onChangeStatus={handleChangeStatus}
                             onSort={handleSort}
                             onClose={populateTodos}
-                            sortColumn={sortColumn} />
+                            sortColumn={sortColumn}
+                            user={user} />
                     </Box>
                     <Box m={2} className={classes.flexCenter}>
                         <RadioGroupList data={filterType} value={filterStatus} handleChange={handleChangeFilterStatus} />

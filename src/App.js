@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { ToastContainer } from 'react-toastify';
 import { Route, Switch } from 'react-router-dom'
 import { createMuiTheme } from '@material-ui/core/styles';
@@ -38,12 +38,12 @@ const theme = createMuiTheme({
 });
 
 function App() {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(auth.getCurrentUser())
 
   useEffect(() => {
     try {
-
       setUser(auth.getCurrentUser())
+      console.log(user)
     } catch (ex) {
 
     }
