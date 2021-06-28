@@ -29,7 +29,7 @@ const TodoList = ({ user }) => {
 
     const classes = useStyles()
     let filtered = []
-
+    console.log(user)
     useEffect(async () => {
         await populateCatgeories()
         await populateTodos()
@@ -40,7 +40,8 @@ const TodoList = ({ user }) => {
     }
 
     const populateTodos = async () => {
-        setTodos(await getTodos(1));
+        console.log(user)
+        setTodos(await getTodos(user.user_id));
     }
 
     useEffect(() => {
@@ -82,7 +83,6 @@ const TodoList = ({ user }) => {
         setSelectedCategory(category)
     }
 
-    console.log(user)
     const getFilteredData = (filter) => {
         const status = (filter === 'completed') ? true : false;
         filtered = (selectedCategory && selectedCategory.id) ? todos.filter(todo => todo.category.id === selectedCategory.id) : todos;
@@ -121,7 +121,7 @@ const TodoList = ({ user }) => {
                     </Box>
                     <Box m={2} className={classes.flexCenter}>
                         <RadioGroupList data={filterType} value={filterStatus} handleChange={handleChangeFilterStatus} />
-                        <SimpleModal title={<AddIcon />} onClose={populateTodos} className={classes.mousePointer} > <TodoItem /></SimpleModal>
+                        <SimpleModal title={<AddIcon />} onClose={populateTodos} className={classes.mousePointer} > <TodoItem user={user} /></SimpleModal>
                     </Box>
                 </Box>
                 <Box p={1} xs={2} style={{ width: '15%' }}>

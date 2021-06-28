@@ -13,6 +13,7 @@ import auth from './services/authService'
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css'
 import Login from './components/auth/login';
+import Logout from './components/auth/logout';
 import Register from './components/auth/register';
 
 const font = "'Montserrat', sans-serif";
@@ -43,7 +44,6 @@ function App() {
   useEffect(() => {
     try {
       setUser(auth.getCurrentUser())
-      console.log(user)
     } catch (ex) {
 
     }
@@ -54,11 +54,12 @@ function App() {
         <ToastContainer />
         <ElevationScroll user={user} />
         <Switch>
-          <Route path='/todos/:id' component={TodoItem} user={user} />
+          <Route path='/todos/:id' render={(props) => <TodoItem {...props} user={user} />} />
           <Route path='/register' component={Register} />
           <Route path='/login' component={Login} />
-          <Route path="/todos" component={TodoList} user={user} />
-          <Route path="/" exact component={TodoList} user={user} />
+          <Route path="/logout" component={Logout} />
+          <Route path="/todos" render={(props) => <TodoList {...props} user={user} />} />
+          <Route path="/" exact render={(props) => <TodoList {...props} user={user} />} />
         </Switch>
       </ThemeProvider>
     </>

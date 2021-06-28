@@ -20,5 +20,8 @@ export function getCurrentUser() {
     }
 }
 
-const authService = { login, getCurrentUser }
+export function logout() {
+    localStorage.removeItem(tokenKey)
+}
+const authService = { login, logout, getCurrentUser }
 export default authService;

@@ -8,6 +8,7 @@ import Joi from 'joi-browser';
 import { validate, validateField } from '../../hooks/useValidate'
 import { useStyles } from './styles';
 import { getCategories } from '../../services/categoryService'
+import { getUser } from '../../services/userService';
 
 
 const TodoItem = ({ todoitem, handleClose, user }) => {
@@ -56,6 +57,13 @@ const TodoItem = ({ todoitem, handleClose, user }) => {
     useEffect(async () => {
         await populateTodo();
         await populateCategories();
+        console.log(user)
+        //const { data } = await getUser(user.id)
+        // currentUser.id = data.data['id']
+        // currentUser.username = data.data['username']
+        // currentUser.first_name = data.data['first_name']
+        // currentUser.password = data.data['password']
+
     }, []);
 
     const changeHandler = ({ target: input }) => {
