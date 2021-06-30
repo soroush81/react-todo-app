@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconButton, Checkbox, Typography } from '@material-ui/core';
+import { IconButton, Checkbox, Typography, Box } from '@material-ui/core';
 import CustomTable from '../common/table'
 import SimpleModal from '../common/modal'
 import TodoItem from './todoitem'
@@ -11,15 +11,11 @@ const TodosTable = ({ todos, onDelete, onChangeStatus, onSort, onClose, sortColu
 
     const getTitle = (todo) => {
         return (
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start'
-            }}>
+            <Box className={classes.todoTitle}>
                 <Typography variant="caption" style={{ textAlign: 'center' }}>{todo.title}</Typography>
-                <Typography variant="caption" color="primary" style={{ fontSize: '0.5rem', fontStyle: 'italic', margin: '0' }}>1400/12/01</Typography>
+                <Typography variant="caption" color="primary" style={{ fontSize: '0.5rem', fontStyle: 'italic', margin: '0' }}>{todo.overdueDate}</Typography>
 
-            </div>)
+            </Box>)
     }
 
 

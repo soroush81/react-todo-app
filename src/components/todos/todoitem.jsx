@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { getTodo, saveTodo } from '../../services/todoService'
 import { Paper, Grid, Button } from '@material-ui/core';
 import FormInput from '../common/formInput'
@@ -9,12 +9,14 @@ import { validate, validateField } from '../../hooks/useValidate'
 import { useStyles } from './styles';
 import { getCategories } from '../../services/categoryService'
 import { getUser } from '../../services/userService';
+import UserContext from '../../context/userContext';
 
 
-const TodoItem = ({ todoitem, handleClose, user }) => {
-    const currentUser = { id: '1', first_name: 'soodeh', username: 'sebrahimi60@yahoo.com', password: '123456' }
+const TodoItem = ({ todoitem, handleClose }) => {
+    //const currentUser = useContext(UserContext)
+    const currentUser = { id: '1', first_name: 'soodeh', username: 'soodeh1', password: '123456' }
     const [categories, setCategories] = useState([])
-    const [todo, setTodo] = useState({ id: '', title: '', categoryId: 5, description: 'description', completed: false, userId: currentUser.id })
+    const [todo, setTodo] = useState({ id: '', title: '', categoryId: 5, description: 'description', completed: false, userId: currentUser.id, overdueDate: new Date() })
     const [errors, setErrors] = useState([]);
     const methods = useForm();
     const classes = useStyles()
@@ -57,7 +59,6 @@ const TodoItem = ({ todoitem, handleClose, user }) => {
     useEffect(async () => {
         await populateTodo();
         await populateCategories();
-        console.log(user)
         //const { data } = await getUser(user.id)
         // currentUser.id = data.data['id']
         // currentUser.username = data.data['username']

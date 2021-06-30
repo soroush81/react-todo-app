@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Box, Hidden, Typography } from '@material-ui/core';
 import { toast } from 'react-toastify'
 import AddIcon from '@material-ui/icons/Add';
@@ -12,6 +12,7 @@ import RadioGroupList from '../common/radioGroup';
 import ListGroup from '../common/listGroup'
 import { useStyles } from './styles';
 import authService from '../../services/authService'
+import UserContext from '../../context/userContext';
 
 
 const filterType = [
@@ -20,7 +21,8 @@ const filterType = [
     { value: "uncompleted", label: "Uncompleted" }
 ]
 
-const TodoList = ({ user }) => {
+const TodoList = () => {
+    const user = useContext(UserContext)
     const [todos, setTodos] = useState([])
     const [categories, SetCategories] = useState([])
     const [selectedCategory, setSelectedCategory] = useState(null)
@@ -29,14 +31,15 @@ const TodoList = ({ user }) => {
 
     const classes = useStyles()
     let filtered = []
-    console.log(user)
     useEffect(async () => {
         await populateCatgeories()
         await populateTodos()
     }, [])
 
     const populateCatgeories = async () => {
-        SetCategories(await getCategories());
+        let allCategories = await getCategories()
+        allCategories = [{ id: "", name: 'All Categories' }, ...allCategories]
+        SetCategories(allCategories);
     }
 
     const populateTodos = async () => {
@@ -85,7 +88,8 @@ const TodoList = ({ user }) => {
 
     const getFilteredData = (filter) => {
         const status = (filter === 'completed') ? true : false;
-        filtered = (selectedCategory && selectedCategory.id) ? todos.filter(todo => todo.category.id === selectedCategory.id) : todos;
+        console.log(selectedCategory)
+        filtered = (selectedCategory && selectedCategory.id !== "") ? todos.filter(todo => todo.category.id === selectedCategory.id) : todos;
         filtered = (filter === 'all') ? filtered : filtered.filter(todo => todo.completed == status)
         return filtered
     }

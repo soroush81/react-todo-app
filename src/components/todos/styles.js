@@ -36,6 +36,11 @@ export const useStyles = makeStyles((theme) => ({
     templateColumnWidth: {
         padding: 0,
         margin: 0
+    },
+    todoTitle: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start'
     }
 }));
 

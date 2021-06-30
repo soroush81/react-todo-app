@@ -30,7 +30,7 @@ const Login = ({ location }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setErrors(validate(user, schema));
-        if (errors) {
+        if (errors && Object.keys(errors).length !== 0) {
             return;
         }
         doSubmit();
@@ -71,11 +71,11 @@ const Login = ({ location }) => {
                                 <FormInput
                                     name='password'
                                     label='Password'
+                                    type='password'
                                     value={user.password}
                                     onChange={changeHandler}
                                     required
                                     size={12}
-                                    autoFocus={true}
                                     error={errors && errors['password']} />
                                 <Grid item >
                                     <Button variant="contained" color="primary" type="submit" disabled={validate(user, schema)}>Save</Button>

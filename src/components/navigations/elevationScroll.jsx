@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Typography, Toolbar, AppBar, CssBaseline, useScrollTrigger, Box, Container } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import AppMenu from './appMenu'
 import { useStyles } from './style'
+import UserContext from '../../context/userContext';
 function ElevationScroll(props) {
     const { children, window } = props;
 
@@ -24,6 +25,7 @@ ElevationScroll.propTypes = {
 };
 
 export default function ElevateAppBar(props) {
+    const currentUser = useContext(UserContext)
     const classes = useStyles()
 
     return (
@@ -35,7 +37,7 @@ export default function ElevateAppBar(props) {
                         <Typography variant="h5"><Link to="/" className={classes.logoStyle}>
                             TODO APP
                         </Link></Typography>
-                        <AppMenu user={props.user} />
+                        <AppMenu user={currentUser} />
                     </Toolbar>
                 </AppBar>
             </ElevationScroll>

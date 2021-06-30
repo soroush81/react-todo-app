@@ -8,7 +8,7 @@ import TodoList from './components/todos/todos';
 import TodoItem from './components/todos/todoitem';
 import ElevationScroll from './components/navigations/elevationScroll'
 import auth from './services/authService'
-
+import UserContext from './context/userContext'
 
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css'
@@ -51,16 +51,18 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <ToastContainer />
-        <ElevationScroll user={user} />
-        <Switch>
-          <Route path='/todos/:id' render={(props) => <TodoItem {...props} user={user} />} />
-          <Route path='/register' component={Register} />
-          <Route path='/login' component={Login} />
-          <Route path="/logout" component={Logout} />
-          <Route path="/todos" render={(props) => <TodoList {...props} user={user} />} />
-          <Route path="/" exact render={(props) => <TodoList {...props} user={user} />} />
-        </Switch>
+        <UserContext.Provider value={user}>
+          <ToastContainer />
+          <ElevationScroll />
+          <Switch>
+            <Route path='/todos/:id'  conponent={TodoItem} />
+            <Route path='/register' component={Register} />
+            <Route path='/login' component={Login} />
+            <Route path="/logout" component={Logout} />
+            <Route path="/todos" component={TodoList} />
+            <Route path="/" exact component={TodoList} />
+          </Switch>
+        </UserContext.Provider>
       </ThemeProvider>
     </>
   );
