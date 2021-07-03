@@ -30,7 +30,8 @@ const httpService = {
     get: axios.get,
     post: axios.post,
     delete: axios.delete,
-    put: axios.put
+    put: axios.put,
+    patch: axios.patch
 }
 
 export default httpService;
