@@ -27,7 +27,8 @@ const TodoItem = ({ todoitem, handleClose }) => {
         categoryId: Joi.number().required().label('Category'),
         description: Joi.string().label('Description'),
         completed: Joi.boolean().required().label('Completed'),
-        userId: Joi.number().label('User')
+        userId: Joi.number().label('User'),
+        overdueDate: Joi.date().label('Date')
     }
     const mapToViewModel = (m) => {
         setTodo({
@@ -36,7 +37,8 @@ const TodoItem = ({ todoitem, handleClose }) => {
             categoryId: m.category.id,
             description: m.description,
             completed: m.completed,
-            userId: currentUser.id
+            overdueDate: new Date(),
+            userId: currentUser.id,
         })
     }
 

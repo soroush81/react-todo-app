@@ -66,11 +66,14 @@ const TodoList = () => {
 
     }
 
-    const handleChangeStatus = async (todo) => {
+    const handleChangeStatus = async (todo, user) => {
         const newTodos = [...todos]
         const index = todos.indexOf(todo)
         newTodos[index] = { ...newTodos[index] }
         newTodos[index].completed = !newTodos[index].completed;
+        newTodos[index].user = user
+        console.log(user)
+        console.log(newTodos)
         setTodos(newTodos);
         await saveTodo(newTodos[index])
     }

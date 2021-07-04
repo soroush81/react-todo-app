@@ -27,9 +27,10 @@ export async function saveTodo(todo) {
     if (todo.id && todo.id !== "") {
         console.log('puuuuuuuuuuut')
         const body = { ...todo };
-        delete body.id
+        // delete body.id
         return await http.put(todosUrl(todo.id), body)
     }
     console.log('poooooooost')
+    console.log(todo)
     return await http.post(apiEndPoint, todo)
 }
