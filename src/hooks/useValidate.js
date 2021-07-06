@@ -17,14 +17,16 @@ export function validateField({ name, value }, schema, errors) {
     const newErrorObj = { ...errors };
     if (errorMessage) newErrorObj[name] = errorMessage;
     else delete newErrorObj[name];
-
     return newErrorObj;
 }
 
 function validateProperty(name, value, schema) {
     const obj = { [name]: value };
     const newSchema = { [name]: schema[name] };
+    console.log(obj)
     const { error } = Joi.validate(obj, newSchema);
+    console.log('sssss')
+    console.log(error)
     if (!error)
         return null;
     return error.details[0].message;

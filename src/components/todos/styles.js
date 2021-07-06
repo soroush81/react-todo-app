@@ -41,7 +41,12 @@ export const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start'
-    }
+    },
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: 200,
+      }
 }));
 
 export const titleStyle = (todo) => {

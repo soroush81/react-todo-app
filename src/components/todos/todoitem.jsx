@@ -1,20 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { getTodo, saveTodo } from '../../services/todoService'
-import { Paper, Grid, Button } from '@material-ui/core';
-import FormInput from '../common/formInput'
-import FormSelect from '../common/formSelect'
 import { useForm, FormProvider } from 'react-hook-form';
+import { Paper, Grid, Button, TextField } from '@material-ui/core';
 import Joi from 'joi-browser';
+import { getTodo, saveTodo, getCategories } from '../../services'
+import { FormInput, FormSelect } from '../../components'
 import { validate, validateField } from '../../hooks/useValidate'
-import { useStyles } from './styles';
-import { getCategories } from '../../services/categoryService'
-import { getUser } from '../../services/userService';
 import UserContext from '../../context/userContext';
-
+import { useStyles } from './styles';
 
 const TodoItem = ({ todoitem, handleClose }) => {
-    //const currentUser = useContext(UserContext)
-    const currentUser = { id: '1', first_name: 'soodeh', username: 'soodeh1', password: '123456' }
+    const currentUser = useContext(UserContext)
     const [categories, setCategories] = useState([])
     const [todo, setTodo] = useState({ id: '', title: '', categoryId: 5, description: 'description', completed: false, userId: currentUser.id, overdueDate: new Date() })
     const [errors, setErrors] = useState([]);
@@ -28,7 +23,7 @@ const TodoItem = ({ todoitem, handleClose }) => {
         description: Joi.string().label('Description'),
         completed: Joi.boolean().required().label('Completed'),
         userId: Joi.number().label('User'),
-        overdueDate: Joi.date().label('Date')
+        overdueDate: Joi.string().label('OverdueDate')
     }
     const mapToViewModel = (m) => {
         setTodo({
@@ -37,7 +32,7 @@ const TodoItem = ({ todoitem, handleClose }) => {
             categoryId: m.category.id,
             description: m.description,
             completed: m.completed,
-            overdueDate: new Date(),
+            overdueDate: m.overdueDate,
             userId: currentUser.id,
         })
     }
@@ -61,12 +56,6 @@ const TodoItem = ({ todoitem, handleClose }) => {
     useEffect(async () => {
         await populateTodo();
         await populateCategories();
-        //const { data } = await getUser(user.id)
-        // currentUser.id = data.data['id']
-        // currentUser.username = data.data['username']
-        // currentUser.first_name = data.data['first_name']
-        // currentUser.password = data.data['password']
-
     }, []);
 
     const changeHandler = ({ target: input }) => {
@@ -86,11 +75,9 @@ const TodoItem = ({ todoitem, handleClose }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setErrors(validate(todo, schema));
-
         if (errors && Object.keys(errors).length !== 0) {
             return;
         }
-
         doSubmit();
     };
 
@@ -100,11 +87,12 @@ const TodoItem = ({ todoitem, handleClose }) => {
         delete newTodo.userId
         const index = categories.findIndex(c => c.id === todo.categoryId)
         newTodo = { ...newTodo, category: categories[index], user: currentUser }
-
         await saveTodo(newTodo);
         handleClose();
     }
 
+    console.log('a')
+    console.log(todo.overdueDate)
 
     return (
         <>
@@ -130,6 +118,19 @@ const TodoItem = ({ todoitem, handleClose }) => {
                                 onChange={(e) => selectHandler(e, 'categoryId')}
                                 required
                                 size={12} />
+                            <Grid item xs={12}>
+                                <TextField
+                                    name="overdueDate"
+                                    label="overdueDate"
+                                    type="date"
+                                    value={todo.overdueDate}
+                                    onChange={changeHandler}
+                                    defaultValue="2021-05-24"
+                                    className={classes.textField}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }} />
+                            </Grid>
                             <Grid item >
                                 <Button variant="contained" color="primary" type="submit" disabled={validate(todo, schema)}>Save</Button>
                             </Grid>

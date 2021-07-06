@@ -2,18 +2,13 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Box, Hidden, Typography } from '@material-ui/core';
 import { toast } from 'react-toastify'
 import AddIcon from '@material-ui/icons/Add';
+import Moment from 'moment';
 
-import { deleteTodo, getTodos, saveTodo } from '../../services/todoService'
-import { getCategories } from '../../services/categoryService'
-import SimpleModal from '../common/modal';
-import TodosTable from './todosTable';
-import TodoItem from './todoitem';
-import RadioGroupList from '../common/radioGroup';
-import ListGroup from '../common/listGroup'
-import { useStyles } from './styles';
-import authService from '../../services/authService'
+import { deleteTodo, getTodos, saveTodo, getCategories } from '../../services'
+import { SimpleModal, TodoItem, TodosTable, RadioGroupList, ListGroup } from '../../components';
 import UserContext from '../../context/userContext';
 
+import { useStyles } from './styles';
 
 const filterType = [
     { value: "all", label: "All" },
@@ -21,7 +16,7 @@ const filterType = [
     { value: "uncompleted", label: "Uncompleted" }
 ]
 
-const TodoList = () => {
+const TodoList = ({ history }) => {
     const user = useContext(UserContext)
     const [todos, setTodos] = useState([])
     const [categories, SetCategories] = useState([])
@@ -31,10 +26,6 @@ const TodoList = () => {
 
     const classes = useStyles()
     let filtered = []
-    useEffect(async () => {
-        await populateCatgeories()
-        await populateTodos()
-    }, [])
 
     const populateCatgeories = async () => {
         let allCategories = await getCategories()
@@ -42,10 +33,20 @@ const TodoList = () => {
         SetCategories(allCategories);
     }
 
-    const populateTodos = async () => {
-        console.log(user)
-        setTodos(await getTodos(user.user_id));
+    const populateTodos = async (queryParam) => {
+        setTodos(await getTodos(user.user_id, queryParam));
     }
+
+    useEffect(async () => {
+        await populateCatgeories()
+        await populateTodos(filterStatus)
+    }, [])
+
+    useEffect(async () => {
+        const queryParam = new URLSearchParams(window.location.search).get('filter')
+        if (queryParam)
+            setFilterStatus(queryParam)
+    })
 
     useEffect(() => {
         filtered = getFilteredData(filterStatus)
@@ -72,13 +73,12 @@ const TodoList = () => {
         newTodos[index] = { ...newTodos[index] }
         newTodos[index].completed = !newTodos[index].completed;
         newTodos[index].user = user
-        console.log(user)
-        console.log(newTodos)
         setTodos(newTodos);
         await saveTodo(newTodos[index])
     }
 
     const handleChangeFilterStatus = (event) => {
+        console.log('test')
         setFilterStatus(event.target.value)
     }
     const handleSort = (sortColumn) => {
@@ -86,14 +86,25 @@ const TodoList = () => {
     }
 
     const handleCategorySelect = (category) => {
+        history.replace('')
+        setFilterStatus('')
         setSelectedCategory(category)
     }
 
-    const getFilteredData = (filter) => {
+    const getTodayTodos = () => {
+        return todos.filter(todo => todo.overdueDate === Moment(new Date()).format('YYYY-MM-DD'))
+    }
+
+    const getFilteredTodos = (filter) => {
         const status = (filter === 'completed') ? true : false;
-        console.log(selectedCategory)
-        filtered = (selectedCategory && selectedCategory.id !== "") ? todos.filter(todo => todo.category.id === selectedCategory.id) : todos;
+        filtered = (selectedCategory && selectedCategory.id !== "") ? filtered.filter(todo => todo.category.id === selectedCategory.id) : todos;
         filtered = (filter === 'all') ? filtered : filtered.filter(todo => todo.completed == status)
+        return filtered
+    }
+
+    const getFilteredData = (filter) => {
+        filtered = todos
+        filtered = (filter === 'today') ? getTodayTodos() : getFilteredTodos(filter)
         return filtered
     }
 

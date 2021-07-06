@@ -1,26 +1,20 @@
-import React from 'react'
-import { IconButton, Checkbox, Typography } from '@material-ui/core';
-import CustomTable from '../common/table'
-import SimpleModal from '../common/modal'
-import TodoItem from './todoitem'
-import DeleteIcon from '@material-ui/icons/Delete'
+import React, { useContext } from 'react'
+import { IconButton, Checkbox, Typography, Box } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { CustomTable, SimpleModal, TodoItem } from '../../components'
+import UserContext from './../../context/userContext';
 import { useStyles, titleStyle } from './styles';
 
 const TodosTable = ({ todos, onDelete, onChangeStatus, onSort, onClose, sortColumn }) => {
     const classes = useStyles();
-    const currentUser = { id: '1', first_name: 'soodeh', username: 'soodeh1', password: '123456' }
+    const currentUser = useContext(UserContext)
 
     const getTitle = (todo) => {
         return (
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start'
-            }}>
-                <Typography variant="caption" style={{ textAlign: 'center' }}>{todo.title}</Typography>
-                <Typography variant="caption" color="primary" style={{ fontSize: '0.5rem', fontStyle: 'italic', margin: '0' }}>{todo.overdueDate}</Typography>
-
-            </div>)
+            <Box className={classes.todoTitle}>
+                <Typography variant="caption" className="center">{todo.title}</Typography>
+                <Typography variant="caption" color="primary" className={classes.date}>{todo.overdueDate}</Typography>
+            </Box>)
     }
 
 

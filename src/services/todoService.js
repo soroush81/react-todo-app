@@ -8,14 +8,14 @@ function todosUrl(id) {
 }
 export async function getTodos(userId) {
     const { data } = await http.get(apiEndPoint)
+   
     todos = data;
     todos = todos.filter(todo => todo.user && todo.user.id === userId)
-    return todos;
+     return todos;
 }
 
 export async function getTodo(id) {
     const { data } = await http.get(todosUrl(id));
-    console.log(data)
     return data;
 }
 
@@ -25,12 +25,9 @@ export async function deleteTodo(id) {
 
 export async function saveTodo(todo) {
     if (todo.id && todo.id !== "") {
-        console.log('puuuuuuuuuuut')
         const body = { ...todo };
         // delete body.id
         return await http.put(todosUrl(todo.id), body)
     }
-    console.log('poooooooost')
-    console.log(todo)
     return await http.post(apiEndPoint, todo)
 }
