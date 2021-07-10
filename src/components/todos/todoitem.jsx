@@ -91,9 +91,6 @@ const TodoItem = ({ todoitem, handleClose }) => {
         handleClose();
     }
 
-    console.log('a')
-    console.log(todo.overdueDate)
-
     return (
         <>
             <FormProvider {...methods}>

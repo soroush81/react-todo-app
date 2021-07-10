@@ -55,7 +55,7 @@ function App() {
           <ToastContainer />
           <ElevationScroll />
           <Switch>
-            <Route path='/todos/today/?filter=today' component={TodoList} />
+            <Route path='/todos/?filter=today' component={TodoList} />
             <Route path='/todos/:id' component={TodoItem} />
             <Route path='/register' component={Register} />
             <Route path='/login' component={Login} />

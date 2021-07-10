@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import logger from './logService'
+import history from '../history';
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-
 axios.interceptors.request.use(function (config) {
     const token = localStorage.getItem("token")
 
@@ -18,7 +18,11 @@ axios.interceptors.request.use(function (config) {
 
 axios.interceptors.response.use(null, error => {
     const expectedError = error.response && error.response.status >= 400 && error.response.status < 500
-
+    if (error.response.status === 401) {
+        console.log('testttttttttttt')
+        localStorage.removeItem("token")
+        history.replace('/login');
+    }
     if (!expectedError) {
         logger.log(error)
         toast.error("unexpected error occurred")

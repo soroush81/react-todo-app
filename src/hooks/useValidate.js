@@ -8,7 +8,6 @@ export function validate(values, schema) {
     for (let err of error.details) {
         errs[err.path[0]] = err.message;
     }
-    console.log(errs)
     return errs;
 }
 
@@ -23,10 +22,7 @@ export function validateField({ name, value }, schema, errors) {
 function validateProperty(name, value, schema) {
     const obj = { [name]: value };
     const newSchema = { [name]: schema[name] };
-    console.log(obj)
     const { error } = Joi.validate(obj, newSchema);
-    console.log('sssss')
-    console.log(error)
     if (!error)
         return null;
     return error.details[0].message;

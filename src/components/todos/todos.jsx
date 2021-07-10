@@ -78,7 +78,6 @@ const TodoList = ({ history }) => {
     }
 
     const handleChangeFilterStatus = (event) => {
-        console.log('test')
         setFilterStatus(event.target.value)
     }
     const handleSort = (sortColumn) => {
@@ -87,12 +86,8 @@ const TodoList = ({ history }) => {
 
     const handleCategorySelect = (category) => {
         history.replace('')
-        setFilterStatus('')
+        setFilterStatus('all')
         setSelectedCategory(category)
-    }
-
-    const getTodayTodos = () => {
-        return todos.filter(todo => todo.overdueDate === Moment(new Date()).format('YYYY-MM-DD'))
     }
 
     const getFilteredTodos = (filter) => {
@@ -104,7 +99,7 @@ const TodoList = ({ history }) => {
 
     const getFilteredData = (filter) => {
         filtered = todos
-        filtered = (filter === 'today') ? getTodayTodos() : getFilteredTodos(filter)
+        filtered = (filter === 'today') ? todos.filter(todo => todo.overdueDate === Moment(new Date()).format('YYYY-MM-DD')) : getFilteredTodos(filter)
         return filtered
     }
 
@@ -138,7 +133,7 @@ const TodoList = ({ history }) => {
                             user={user} />
                     </Box>
                     <Box m={2} className={classes.flexCenter}>
-                        <RadioGroupList data={filterType} value={filterStatus} handleChange={handleChangeFilterStatus} />
+                        <RadioGroupList data={filterType} value={(filterStatus === 'today') ? 'all' : filterStatus} handleChange={handleChangeFilterStatus} />
                         <SimpleModal title={<AddIcon />} onClose={populateTodos} className={classes.mousePointer} > <TodoItem user={user} /></SimpleModal>
                     </Box>
                 </Box>
