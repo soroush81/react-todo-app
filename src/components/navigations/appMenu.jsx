@@ -51,7 +51,7 @@ const AppMenu = ({ user }) => {
                 </Box>}
                 {user &&
                     <Box>
-                        <MenuItem onClick={handleClose} component={Link} to="/todos?filter:today">Today</MenuItem>
+                        <MenuItem onClick={handleClose} component={Link} to="/todos?filter=today">Today</MenuItem>
                         <MenuItem onClick={handleClose} component={Link} to="/profile">Profile</MenuItem>
                         <MenuItem onClick={handleClose} component={Link} to="/logout">Logout</MenuItem>
                     </Box>}

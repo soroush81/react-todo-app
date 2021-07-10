@@ -6,6 +6,7 @@ import * as userService from '../../services/userService'
 import FormInput from '../common/formInput'
 import { validateField, validate } from '../../hooks/useValidate'
 import auth from '../../services/authService'
+import authService from './../../services/authService';
 
 const Register = ({ history }) => {
     const [user, setUser] = useState({ username: '', password: '', firstname: '', lastname: '', email: '' });
@@ -31,10 +32,12 @@ const Register = ({ history }) => {
     };
 
     const doSubmit = async () => {
+        console.log('11111')
         try {
             const response = await userService.register(user)
-            auth.loginWithJwt(response.headers['token']);
-            window.location = "/";
+            // await authService.login(user.username, user.password)
+            //auth.loginWithJwt(response.data['token']);
+            history.push('/')
         }
         catch (ex) {
             if (ex.response && ex.response.status === 400) {

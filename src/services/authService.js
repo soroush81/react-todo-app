@@ -20,8 +20,14 @@ export function getCurrentUser() {
     }
 }
 
+export function loginWithJwt(jwt) {
+    console.log('loginwithjwt')
+    console.log(jwt)
+    localStorage.setItem(tokenKey, jwt)
+}
+
 export function logout() {
     localStorage.removeItem(tokenKey)
 }
-const authService = { login, logout, getCurrentUser }
+const authService = { login, logout, getCurrentUser,loginWithJwt }
 export default authService;

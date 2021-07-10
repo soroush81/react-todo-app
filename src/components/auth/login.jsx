@@ -78,7 +78,7 @@ const Login = ({ location }) => {
                                     size={12}
                                     error={errors && errors['password']} />
                                 <Grid item >
-                                    <Button variant="contained" color="primary" type="submit" disabled={validate(user, schema)}>Save</Button>
+                                    <Button variant="contained" color="primary" type="submit" disabled={validate(user, schema)}>Login</Button>
                                 </Grid>
                             </Grid>
                         </Paper>
