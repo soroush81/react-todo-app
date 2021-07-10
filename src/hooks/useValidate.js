@@ -2,7 +2,9 @@ import Joi from 'joi-browser';
 
 export function validate(values, schema) {
     const options = { abortEarly: false };
+
     const { error } = Joi.validate(values, schema, options)
+    console.log(error)
     if (!error) return;
     const errs = {};
     for (let err of error.details) {

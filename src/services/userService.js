@@ -7,7 +7,7 @@ function userUrl(id) {
 }
 
 export async function register(user) {
-    return await http.post('http://localhost:8080/register/', {
+    return await http.post('http://localhost:8080/api/register/', {
         username: user.username,
         password: user.password,
         first_name: user.firstname,

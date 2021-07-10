@@ -24,7 +24,7 @@ const Register = ({ history }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setErrors(validate(user, schema));
-        if (errors) {
+        if (errors && Object.keys(errors).length !== 0) {
             return;
         }
         doSubmit();
@@ -33,7 +33,7 @@ const Register = ({ history }) => {
     const doSubmit = async () => {
         try {
             const response = await userService.register(user)
-            auth.loginWithJwt(response.headers['x-auth-token']);
+            auth.loginWithJwt(response.headers['token']);
             window.location = "/";
         }
         catch (ex) {

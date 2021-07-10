@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Box, Hidden, Typography } from '@material-ui/core';
+import Moment from 'moment';
 import { toast } from 'react-toastify'
 import AddIcon from '@material-ui/icons/Add';
-import Moment from 'moment';
 
 import { deleteTodo, getTodos, saveTodo, getCategories } from '../../services'
 import { SimpleModal, TodoItem, TodosTable, RadioGroupList, ListGroup } from '../../components';
