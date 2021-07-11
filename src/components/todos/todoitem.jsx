@@ -2,20 +2,20 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useForm, FormProvider } from 'react-hook-form';
 import { Paper, Grid, Button, TextField } from '@material-ui/core';
 import Joi from 'joi-browser';
-import { getTodo, saveTodo, getCategories } from '../../services'
+import { getTodo, saveTodo } from '../../services'
 import { FormInput, FormSelect } from '../../components'
 import { validate, validateField } from '../../hooks/useValidate'
 import UserContext from '../../context/userContext';
 import { useStyles } from './styles';
+import CategoryContext from './../../context/categoryContext';
 
 const TodoItem = ({ todoitem, handleClose }) => {
     const currentUser = useContext(UserContext)
-    const [categories, setCategories] = useState([])
+    const categories = useContext(CategoryContext)
     const [todo, setTodo] = useState({ id: '', title: '', categoryId: 5, description: 'description', completed: false, userId: currentUser.id, overdueDate: new Date() })
     const [errors, setErrors] = useState([]);
     const methods = useForm();
     const classes = useStyles()
-
     const schema = {
         id: Joi.number().allow(''),
         title: Joi.string().required().label('Title'),
@@ -37,25 +37,21 @@ const TodoItem = ({ todoitem, handleClose }) => {
         })
     }
 
-    const populateTodo = async () => {
-        try {
-            const todoId = todoitem.id;
-            if (todoId === "new") return;
-            const _todo = await getTodo(todoId);
-            _todo['userId'] = currentUser.id
-            mapToViewModel(_todo);
+    useEffect(() => {
+        async function populateData() {
+            try {
+                const todoId = todoitem.id;
+                if (todoId === "new") return;
+                const _todo = await getTodo(todoId);
+                _todo['userId'] = currentUser.id
+                mapToViewModel(_todo);
+                categories.filter(c => c.id !== "")
+            }
+            catch (ex) {
+            }
         }
-        catch (ex) {
-        }
-    }
+        populateData();
 
-    const populateCategories = async () => {
-        setCategories(await getCategories());
-    }
-
-    useEffect(async () => {
-        await populateTodo();
-        await populateCategories();
     }, []);
 
     const changeHandler = ({ target: input }) => {
@@ -122,7 +118,6 @@ const TodoItem = ({ todoitem, handleClose }) => {
                                     type="date"
                                     value={todo.overdueDate}
                                     onChange={changeHandler}
-                                    defaultValue="2021-05-24"
                                     className={classes.textField}
                                     InputLabelProps={{
                                         shrink: true,

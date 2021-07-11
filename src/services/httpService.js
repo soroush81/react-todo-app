@@ -19,7 +19,6 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(null, error => {
     const expectedError = error.response && error.response.status >= 400 && error.response.status < 500
     if (error.response.status === 401) {
-        console.log(error)
         localStorage.removeItem("token")
         history.replace('/login');
     }

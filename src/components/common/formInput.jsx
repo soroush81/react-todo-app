@@ -12,6 +12,7 @@ function FormInput({ value, error, name, size, ...rest }) {
                             variant="outlined"
                             fullWidth
                             {...rest}
+                            autoComplete="on"
                             name={name}
                             value={value}
                             error={error !== undefined}

@@ -4,11 +4,12 @@ import Moment from 'moment';
 import { toast } from 'react-toastify'
 import AddIcon from '@material-ui/icons/Add';
 
-import { deleteTodo, getTodos, saveTodo, getCategories } from '../../services'
+import { deleteTodo, getTodos, saveTodo } from '../../services'
 import { SimpleModal, TodoItem, TodosTable, RadioGroupList, ListGroup } from '../../components';
 import UserContext from '../../context/userContext';
 
 import { useStyles } from './styles';
+import CategoryContext from './../../context/categoryContext';
 
 const filterType = [
     { value: "all", label: "All" },
@@ -18,8 +19,9 @@ const filterType = [
 
 const TodoList = ({ history }) => {
     const user = useContext(UserContext)
+    const categories = useContext(CategoryContext)
+    const [allCategories, setAllCategories] = useState([{ id: "", name: 'All Categories' }, ...categories])
     const [todos, setTodos] = useState([])
-    const [categories, SetCategories] = useState([])
     const [selectedCategory, setSelectedCategory] = useState(null)
     const [sortColumn, setSortColumn] = useState({ path: 'title', order: 'asc' })
     const [filterStatus, setFilterStatus] = useState('all')
@@ -27,44 +29,40 @@ const TodoList = ({ history }) => {
     const classes = useStyles()
     let filtered = []
 
-    const populateCatgeories = async () => {
-        let allCategories = await getCategories()
-        allCategories = [{ id: "", name: 'All Categories' }, ...allCategories]
-        SetCategories(allCategories);
-    }
-
     const populateTodos = async (queryParam) => {
         setTodos(await getTodos(user.user_id, queryParam));
     }
 
-    useEffect(async () => {
-        await populateCatgeories()
-        await populateTodos(filterStatus)
+    useEffect(() => {
+        async function populateData() {
+            await populateTodos(filterStatus)
+        }
+        populateData();
     }, [])
 
-    useEffect(async () => {
+    useEffect(() => {
         const queryParam = new URLSearchParams(window.location.search).get('filter')
         if (queryParam)
             setFilterStatus(queryParam)
     })
 
     useEffect(() => {
+        setAllCategories([{ id: "", name: 'All Categories' }, ...categories])
         filtered = getFilteredData(filterStatus)
-    }, [filterStatus])
+    }, [filterStatus, categories])
 
     const handleDelete = async (id) => {
         const originalTodos = todos;
 
         try {
-            const filtered = todos.filter(m => m.id !== id)
-            setTodos(filtered)
+            const deleted = todos.filter(m => m.id !== id)
+            setTodos(deleted)
             await deleteTodo(id);
         } catch (ex) {
             if (ex.response && ex.response.status === 404)
                 toast.error('the todo has already been deleted')
             setTodos(originalTodos)
         }
-
     }
 
     const handleChangeStatus = async (todo, user) => {
@@ -93,7 +91,7 @@ const TodoList = ({ history }) => {
     const getFilteredTodos = (filter) => {
         const status = (filter === 'completed') ? true : false;
         filtered = (selectedCategory && selectedCategory.id !== "") ? filtered.filter(todo => todo.category.id === selectedCategory.id) : todos;
-        filtered = (filter === 'all') ? filtered : filtered.filter(todo => todo.completed == status)
+        filtered = (filter === 'all') ? filtered : filtered.filter(todo => todo.completed === status)
         return filtered
     }
 
@@ -109,7 +107,7 @@ const TodoList = ({ history }) => {
         <>
             <Box m={2} className={classes.flexCenter}>
                 <Typography variant="h6">There is no todo in the list</Typography>
-                <SimpleModal title={<AddIcon />} onClose={populateTodos} className={classes.mousePointer} > <TodoItem /></SimpleModal>
+                <SimpleModal title={<AddIcon />} onClose={() => populateTodos()} className={classes.mousePointer} > <TodoItem /></SimpleModal>
             </Box>
         </>);
 
@@ -119,7 +117,7 @@ const TodoList = ({ history }) => {
             <Box display="flex" p={1}>
                 <Hidden smDown>
                     <Box p={1} xs={2} style={{ width: '15%' }}>
-                        <ListGroup title="Categories" items={categories} selectedItem={selectedCategory} onItemSelect={handleCategorySelect} />
+                        <ListGroup title="Categories" items={allCategories} selectedItem={selectedCategory} onItemSelect={handleCategorySelect} />
                     </Box>
                 </Hidden>
                 <Box className={classes.marginAuto}>
@@ -128,13 +126,13 @@ const TodoList = ({ history }) => {
                             onDelete={handleDelete}
                             onChangeStatus={handleChangeStatus}
                             onSort={handleSort}
-                            onClose={populateTodos}
+                            onClose={() => populateTodos()}
                             sortColumn={sortColumn}
                             user={user} />
                     </Box>
                     <Box m={2} className={classes.flexCenter}>
                         <RadioGroupList data={filterType} value={(filterStatus === 'today') ? 'all' : filterStatus} handleChange={handleChangeFilterStatus} />
-                        <SimpleModal title={<AddIcon />} onClose={populateTodos} className={classes.mousePointer} > <TodoItem user={user} /></SimpleModal>
+                        <SimpleModal title={<AddIcon />} onClose={() => populateTodos()} className={classes.mousePointer} > <TodoItem user={user} /></SimpleModal>
                     </Box>
                 </Box>
                 <Box p={1} xs={2} style={{ width: '15%' }}>

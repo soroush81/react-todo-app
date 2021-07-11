@@ -21,8 +21,6 @@ export function getCurrentUser() {
 }
 
 export function loginWithJwt(jwt) {
-    console.log('loginwithjwt')
-    console.log(jwt)
     localStorage.setItem(tokenKey, jwt)
 }
 

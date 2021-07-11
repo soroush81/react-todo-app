@@ -9,14 +9,14 @@ import TodoItem from './components/todos/todoitem';
 import ElevationScroll from './components/navigations/elevationScroll'
 import auth from './services/authService'
 import UserContext from './context/userContext'
-
+import { getCategories } from './services'
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css'
 import Login from './components/auth/login';
 import Logout from './components/auth/logout';
 import Register from './components/auth/register';
+import CategoryContext from './context/categoryContext';
 
-const font = "'Montserrat', sans-serif";
 
 const theme = createMuiTheme({
   typography: {
@@ -40,18 +40,25 @@ const theme = createMuiTheme({
 
 function App() {
   const [user, setUser] = useState(auth.getCurrentUser())
-
+  const [categories, setCategories] = useState([])
+  const populateCatgeories = async () => {
+      await getCategories().then(cats => {
+        setCategories(cats)
+      })
+  }
   useEffect(() => {
-    try {
-      setUser(auth.getCurrentUser())
-    } catch (ex) {
-
-    }
+      async function fetchData(){
+        setUser(auth.getCurrentUser())
+        if (window.location.pathname !== '/login' ) 
+          await populateCatgeories();
+      }
+      fetchData();
   }, [])
   return (
     <>
       <ThemeProvider theme={theme}>
         <UserContext.Provider value={user}>
+        <CategoryContext.Provider value={categories}>
           <ToastContainer />
           <ElevationScroll />
           <Switch>
@@ -63,6 +70,7 @@ function App() {
             <Route path="/todos" component={TodoList} />
             <Route path="/" exact component={TodoList} />
           </Switch>
+        </CategoryContext.Provider>
         </UserContext.Provider>
       </ThemeProvider>
     </>

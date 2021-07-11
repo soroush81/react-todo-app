@@ -5,8 +5,6 @@ import Joi from 'joi-browser'
 import * as userService from '../../services/userService'
 import FormInput from '../common/formInput'
 import { validateField, validate } from '../../hooks/useValidate'
-import auth from '../../services/authService'
-import authService from './../../services/authService';
 
 const Register = ({ history }) => {
     const [user, setUser] = useState({ username: '', password: '', firstname: '', lastname: '', email: '' });
@@ -19,7 +17,6 @@ const Register = ({ history }) => {
         firstname: Joi.string().required().label('FirstName'),
         lastname: Joi.string().required().label('LastName'),
         email: Joi.string().required().label('Email')
-
     }
 
     const handleSubmit = (e) => {
@@ -32,9 +29,8 @@ const Register = ({ history }) => {
     };
 
     const doSubmit = async () => {
-        console.log('11111')
         try {
-            const response = await userService.register(user)
+            await userService.register(user)
             // await authService.login(user.username, user.password)
             //auth.loginWithJwt(response.data['token']);
             history.push('/')

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListSubheader, List, ListItem, ListItemText, ListItemIcon, Typography, Box, Divider } from '@material-ui/core';
+import { ListSubheader, List, ListItem, ListItemText, Typography, Box, Divider } from '@material-ui/core';
 
 const ListGroup = ({ items, title, onItemSelect, textProperty, valueProperty, selectedItem }) => {
     return (
@@ -15,15 +15,15 @@ const ListGroup = ({ items, title, onItemSelect, textProperty, valueProperty, se
                     </>
                 }
             >
-                {items.map(item => (
-                    <>
-                        <ListItem button selected={selectedItem === item} key={Math.random()} onClick={() => onItemSelect(item)}>
+                {items.map((item, index) => (
+                    <React.Fragment key={index}>
+                        <ListItem button selected={selectedItem === item} onClick={() => onItemSelect(item)}>
                             <ListItemText
                                 disableTypography
                                 primary={<Typography style={{ fontSize: "0.6rem" }} type="caption">{item[textProperty]}</Typography>} />
                         </ListItem>
                         <Divider />
-                    </>
+                    </React.Fragment>
                 ))}
             </List>
 
