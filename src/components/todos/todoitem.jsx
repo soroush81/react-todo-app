@@ -12,10 +12,13 @@ import CategoryContext from './../../context/categoryContext';
 const TodoItem = ({ todoitem, handleClose }) => {
     const currentUser = useContext(UserContext)
     const categories = useContext(CategoryContext)
+
     const [todo, setTodo] = useState({ id: '', title: '', categoryId: 5, description: 'description', completed: false, userId: currentUser.id, overdueDate: new Date() })
     const [errors, setErrors] = useState([]);
+
     const methods = useForm();
     const classes = useStyles()
+
     const schema = {
         id: Joi.number().allow(''),
         title: Joi.string().required().label('Title'),
@@ -39,29 +42,14 @@ const TodoItem = ({ todoitem, handleClose }) => {
 
     useEffect(() => {
         async function populateData() {
-            try {
-                const todoId = todoitem.id;
-                if (todoId === "new") return;
-                const _todo = await getTodo(todoId);
-                _todo['userId'] = currentUser.id
-                mapToViewModel(_todo);
-                categories.filter(c => c.id !== "")
-            }
-            catch (ex) {
-            }
+            const todoId = todoitem.id;
+            if (todoId === "new") return;
+            mapToViewModel(await getTodo(todoId));
         }
         populateData();
-
     }, []);
 
-    const changeHandler = ({ target: input }) => {
-        setErrors(validateField(input, schema, errors));
-        const newTodo = { ...todo };
-        newTodo[input.name] = input.value;
-        setTodo(newTodo);
-    }
-
-    const selectHandler = ({ target: input }, path) => {
+    const changeHandler = ({ target: input }, path) => {
         setErrors(validateField(input, schema, errors));
         const newTodo = { ...todo };
         newTodo[path] = input.value;
@@ -79,8 +67,6 @@ const TodoItem = ({ todoitem, handleClose }) => {
 
     const doSubmit = async () => {
         let newTodo = { ...todo }
-        delete newTodo.categoryId
-        delete newTodo.userId
         const index = categories.findIndex(c => c.id === todo.categoryId)
         newTodo = { ...newTodo, category: categories[index], user: currentUser }
         await saveTodo(newTodo);
@@ -97,7 +83,7 @@ const TodoItem = ({ todoitem, handleClose }) => {
                                 name='title'
                                 label='Title'
                                 value={todo.title}
-                                onChange={changeHandler}
+                                onChange={e => changeHandler(e, 'title')}
                                 required
                                 size={12}
                                 autoFocus={true}
@@ -108,7 +94,7 @@ const TodoItem = ({ todoitem, handleClose }) => {
                                 items={categories}
                                 labelId='categorySelectLabel'
                                 selectedId={todo.categoryId}
-                                onChange={(e) => selectHandler(e, 'categoryId')}
+                                onChange={(e) => changeHandler(e, 'categoryId')}
                                 required
                                 size={12} />
                             <Grid item xs={12}>
@@ -117,7 +103,7 @@ const TodoItem = ({ todoitem, handleClose }) => {
                                     label="overdueDate"
                                     type="date"
                                     value={todo.overdueDate}
-                                    onChange={changeHandler}
+                                    onChange={e => changeHandler(e, 'overdueDate')}
                                     className={classes.textField}
                                     InputLabelProps={{
                                         shrink: true,

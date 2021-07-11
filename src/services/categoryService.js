@@ -8,7 +8,6 @@ function categoriesUrl(id) {
 }
 export async function getCategories() {
     const { data } = await http.get(apiEndPoint)
-    console.log(data)
     categories = data;
     return categories;
 }
