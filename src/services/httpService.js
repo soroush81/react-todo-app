@@ -20,18 +20,29 @@ axios.interceptors.response.use(null, error => {
     const expectedError = error.response && error.response.status >= 400 && error.response.status < 500
     if (error.response.status === 401) {
         localStorage.removeItem("token")
-        history.replace('/login');
+        if (window.location.pathname !== '/login' ) 
+            history.replace('/login');
+        
     }
     if (!expectedError) {
         logger.log(error)
         toast.error("unexpected error occurred")
+
     }
     else{
         const errorList = error.response.data
-        Object.keys(errorList).map(key => {
-            return toast.error(error.response.data[key][0]);
-        });
+        if (error.response.status === 401) {
+            Object.keys(errorList).map(key => {
+                return toast.error(error.response.data[key]);
+            });
+        }
+        else{
+            Object.keys(errorList).map(key => {
+                return toast.error(error.response.data[key][0]);
+            });
+        }
     }
+    toast.error(Promise.reject(error).message)
     return Promise.reject(error);
 })
 

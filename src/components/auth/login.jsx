@@ -38,16 +38,16 @@ const Login = ({ location }) => {
     }
 
     const doSubmit = async () => {
-        try {
-            await authService.login(user.username, user.password)
-            window.location = (location.state) ? location.state.from.pathname : '/';
-        } catch (ex) {
-            if (ex.response && ex.response.status === 400) {
-                const errs = { ...errors }
-                errs.username = ex.response.data;
-                setErrors(errs)
-            }
-        }
+        //  try {
+        await authService.login(user.username, user.password)
+        window.location = (location.state) ? location.state.from.pathname : '/';
+        // } catch (ex) {
+        //     if (ex.response && ex.response.status === 400) {
+        //         const errs = { ...errors }
+        //         errs.username = ex.response.data;
+        //         setErrors(errs)
+        //     }
+        // }
     }
 
     if (authService.getCurrentUser()) return <Redirect to="/" />
@@ -82,7 +82,7 @@ const Login = ({ location }) => {
                                 </Grid>
                                 <Grid item style={{ marginTop: 16, color: "red" }}>
                                     <Typography variant="caption">
-                                        {errors && Object.keys(errors).length !== 0 && Object.values(errors)}
+                                        {(errors && Object.keys(errors).length !== 0) ? Object.values(errors) : null}
                                     </Typography>
                                 </Grid>
                             </Grid>
