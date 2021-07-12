@@ -38,16 +38,8 @@ const Login = ({ location }) => {
     }
 
     const doSubmit = async () => {
-        //  try {
         await authService.login(user.username, user.password)
         window.location = (location.state) ? location.state.from.pathname : '/';
-        // } catch (ex) {
-        //     if (ex.response && ex.response.status === 400) {
-        //         const errs = { ...errors }
-        //         errs.username = ex.response.data;
-        //         setErrors(errs)
-        //     }
-        // }
     }
 
     if (authService.getCurrentUser()) return <Redirect to="/" />
