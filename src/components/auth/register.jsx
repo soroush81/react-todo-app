@@ -28,17 +28,9 @@ const Register = ({ history }) => {
     };
 
     const doSubmit = async () => {
-        try {
-            await register(user)
-            history.push('/')
-        }
-        catch (ex) {
-            if (ex.response && ex.response.status === 400) {
-                const errs = { ...errors };
-                errs.username = ex.response.data;
-                //setErrors(Object.values(errs))
-            }
-        }
+        await register(user)
+        history.push('/')
+
     }
 
     const changeHandler = ({ target: input }) => {
