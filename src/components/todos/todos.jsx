@@ -30,7 +30,7 @@ const TodoList = ({ history }) => {
     let filtered = []
 
     const populateTodos = async (queryParam) => {
-        setTodos(await getTodos(user.user_id, queryParam));
+        user && setTodos(await getTodos(user.user_id, queryParam));
     }
 
     useEffect(() => {

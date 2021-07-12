@@ -47,13 +47,13 @@ function App() {
       })
   }
   useEffect(() => {
-      async function fetchData(){
-        setUser(auth.getCurrentUser())
-        if (window.location.pathname !== '/login' ) 
-          await populateCatgeories();
-      }
+    async function fetchData(){
+      setUser(auth.getCurrentUser())
+      if (window.location.pathname !== '/login' ) 
+      await populateCatgeories();
+    }
       fetchData();
-  }, [])
+  },[])
   return (
     <>
       <ThemeProvider theme={theme}>

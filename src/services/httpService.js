@@ -26,6 +26,12 @@ axios.interceptors.response.use(null, error => {
         logger.log(error)
         toast.error("unexpected error occurred")
     }
+    else{
+        const errorList = error.response.data
+        Object.keys(errorList).map(key => {
+            return toast.error(error.response.data[key][0]);
+        });
+    }
     return Promise.reject(error);
 })
 

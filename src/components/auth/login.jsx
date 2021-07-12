@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form';
-import { Paper, Grid, Button, Box } from '@material-ui/core'
+import { Paper, Grid, Button, Box, Typography } from '@material-ui/core'
 import { Redirect } from 'react-router-dom'
 
 import Joi from 'joi-browser';
@@ -21,6 +21,7 @@ const Login = ({ location }) => {
 
     const changeHandler = ({ target: input }) => {
         const newErrorObj = validateField(input, schema, errors);
+
         setErrors(newErrorObj)
         const newUserObj = { ...user }
         newUserObj[input.name] = input.value;
@@ -36,7 +37,7 @@ const Login = ({ location }) => {
         doSubmit();
     }
 
-    const doSubmit = async (e) => {
+    const doSubmit = async () => {
         try {
             await authService.login(user.username, user.password)
             window.location = (location.state) ? location.state.from.pathname : '/';
@@ -78,6 +79,11 @@ const Login = ({ location }) => {
                                     error={errors && errors['password']} />
                                 <Grid item >
                                     <Button variant="contained" color="primary" type="submit" disabled={validate(user, schema)}>Login</Button>
+                                </Grid>
+                                <Grid item style={{ marginTop: 16, color: "red" }}>
+                                    <Typography variant="caption">
+                                        {errors && Object.keys(errors).length !== 0 && Object.values(errors)}
+                                    </Typography>
                                 </Grid>
                             </Grid>
                         </Paper>

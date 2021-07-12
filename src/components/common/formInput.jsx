@@ -3,6 +3,7 @@ import { useFormContext, Controller } from 'react-hook-form';
 import { TextField, Grid, Box } from '@material-ui/core';
 function FormInput({ value, error, name, size, ...rest }) {
     const { control } = useFormContext();
+
     return (
         <Grid item xs={size}>
             <Box mt={2}>
@@ -16,7 +17,7 @@ function FormInput({ value, error, name, size, ...rest }) {
                             name={name}
                             value={value}
                             error={error !== undefined}
-                            helperText={error && (value === "" ? error : ' ')}
+                            helperText={error && (value === '' ? error : ' ')}
                         />
                     )}
                     name={name}

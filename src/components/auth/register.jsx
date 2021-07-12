@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Paper, Grid, Button } from '@material-ui/core';
+import { Paper, Grid, Button, Typography } from '@material-ui/core';
 import { useForm, FormProvider } from 'react-hook-form';
 import Joi from 'joi-browser'
-import * as userService from '../../services/userService'
+import { register } from '../../services'
 import FormInput from '../common/formInput'
 import { validateField, validate } from '../../hooks/useValidate'
 
@@ -10,7 +10,6 @@ const Register = ({ history }) => {
     const [user, setUser] = useState({ username: '', password: '', firstname: '', lastname: '', email: '' });
     const [errors, setErrors] = useState([]);
     const methods = useForm();
-
     const schema = {
         username: Joi.string().required().label('Username'),
         password: Joi.string().min(5).required().label('Password'),
@@ -30,16 +29,14 @@ const Register = ({ history }) => {
 
     const doSubmit = async () => {
         try {
-            await userService.register(user)
-            // await authService.login(user.username, user.password)
-            //auth.loginWithJwt(response.data['token']);
+            await register(user)
             history.push('/')
         }
         catch (ex) {
             if (ex.response && ex.response.status === 400) {
                 const errs = { ...errors };
                 errs.username = ex.response.data;
-                setErrors(errs)
+                //setErrors(Object.values(errs))
             }
         }
     }
@@ -74,7 +71,7 @@ const Register = ({ history }) => {
                                 required
                                 size={12}
                                 type='password'
-                                error={errors && errors['username']} />
+                                error={errors && errors['password']} />
                             <FormInput
                                 name='firstname'
                                 label='FirstName'
@@ -102,10 +99,16 @@ const Register = ({ history }) => {
                             <Grid item style={{ marginTop: 16 }}>
                                 <Button variant="contained" color="primary" type="submit" disabled={validate(user, schema)}>Register</Button>
                             </Grid>
+                            <Grid item style={{ marginTop: 16, color: "red" }}>
+                                <Typography variant="caption">
+                                    {(errors && Object.keys(errors).length !== 0) ? Object.values(errors) : null}
+                                </Typography>
+                            </Grid>
                         </Grid>
                     </Paper>
                 </form>
             </FormProvider>
+
         </>
     )
 }

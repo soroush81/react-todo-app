@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useForm, FormProvider } from 'react-hook-form';
-import { Paper, Grid, Button, TextField } from '@material-ui/core';
+import { Paper, Grid, Button, TextField, Typography } from '@material-ui/core';
 import Joi from 'joi-browser';
 import { getTodo, saveTodo } from '../../services'
 import { FormInput, FormSelect } from '../../components'
@@ -21,7 +21,7 @@ const TodoItem = ({ todoitem, handleClose }) => {
 
     const schema = {
         id: Joi.number().allow(''),
-        title: Joi.string().required().label('Title'),
+        title: Joi.string().required().max(120).label('Title'),
         categoryId: Joi.number().required().label('Category'),
         description: Joi.string().label('Description'),
         completed: Joi.boolean().required().label('Completed'),
@@ -42,7 +42,7 @@ const TodoItem = ({ todoitem, handleClose }) => {
 
     useEffect(() => {
         async function populateData() {
-            const todoId = todoitem.id;
+            const todoId = todoitem ? todoitem.id : "new";
             if (todoId === "new") return;
             mapToViewModel(await getTodo(todoId));
         }
@@ -111,6 +111,11 @@ const TodoItem = ({ todoitem, handleClose }) => {
                             </Grid>
                             <Grid item >
                                 <Button variant="contained" color="primary" type="submit" disabled={validate(todo, schema)}>Save</Button>
+                            </Grid>
+                            <Grid item style={{ marginTop: 16, color: "red" }}>
+                                <Typography variant="caption">
+                                    {(errors && Object.keys(errors).length !== 0) ? Object.values(errors) : null}
+                                </Typography>
                             </Grid>
                         </Grid>
                     </Paper>

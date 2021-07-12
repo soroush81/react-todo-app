@@ -4,12 +4,14 @@ export function validate(values, schema) {
     const options = { abortEarly: false };
 
     const { error } = Joi.validate(values, schema, options)
+    
     if (!error) return;
     const errs = {};
     for (let err of error.details) {
         errs[err.path[0]] = err.message;
     }
-    return (errs) ? true : false;
+   
+    return errs ? true : false;
 }
 
 export function validateField({ name, value }, schema, errors) {
@@ -26,5 +28,6 @@ function validateProperty(name, value, schema) {
     const { error } = Joi.validate(obj, newSchema);
     if (!error)
         return null;
+      
     return error.details[0].message;
 }
