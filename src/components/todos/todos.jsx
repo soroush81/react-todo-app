@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Box, Hidden, Typography } from '@material-ui/core';
 import Moment from 'moment';
 import { toast } from 'react-toastify'
@@ -29,16 +29,16 @@ const TodoList = ({ history }) => {
     const classes = useStyles()
     let filtered = []
 
-    const populateTodos = async (queryParam) => {
+    const populateTodos = useCallback(async (queryParam) => {
         user && setTodos(await getTodos(user.user_id, queryParam));
-    }
+    }, [user])
 
     useEffect(() => {
         async function populateData() {
             await populateTodos(filterStatus)
         }
         populateData();
-    }, [])
+    }, [filterStatus, populateTodos])
 
     useEffect(() => {
         const queryParam = new URLSearchParams(window.location.search).get('filter')

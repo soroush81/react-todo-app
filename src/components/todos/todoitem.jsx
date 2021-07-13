@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useCallback } from 'react'
 import { useForm, FormProvider } from 'react-hook-form';
 import { Paper, Grid, Button, TextField, Typography } from '@material-ui/core';
 import Joi from 'joi-browser';
@@ -28,7 +28,7 @@ const TodoItem = ({ todoitem, handleClose }) => {
         userId: Joi.number().label('User'),
         overdueDate: Joi.string().label('OverdueDate')
     }
-    const mapToViewModel = (m) => {
+    const mapToViewModel = useCallback((m) => {
         setTodo({
             id: m.id,
             title: m.title,
@@ -38,7 +38,7 @@ const TodoItem = ({ todoitem, handleClose }) => {
             overdueDate: m.overdueDate,
             userId: currentUser.id,
         })
-    }
+    }, [currentUser.id])
 
     useEffect(() => {
         async function populateData() {
@@ -47,7 +47,7 @@ const TodoItem = ({ todoitem, handleClose }) => {
             mapToViewModel(await getTodo(todoId));
         }
         populateData();
-    }, []);
+    }, [todoitem, mapToViewModel]);
 
     const changeHandler = ({ target: input }, path) => {
         setErrors(validateField(input, schema, errors));
