@@ -1,13 +1,13 @@
 import http from './httpService';
 
-const apiEndPoint = "/users";
+const apiEndPoint = "/register/";
 
 function userUrl(id) {
     return `${apiEndPoint}/${id}`
 }
 
 export async function register(user) {
-    return await http.post('http://localhost:8080/api/register/', {
+    return await http.post(apiEndPoint, {
         username: user.username,
         password: user.password,
         first_name: user.firstname,
